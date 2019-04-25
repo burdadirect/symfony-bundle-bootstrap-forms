@@ -1,0 +1,320 @@
+{% use 'form_div_layout.html.twig' %}
+
+
+
+{% block form_row %}
+  {% set sub_form = false %}
+  {% if block_prefixes|length == 2 %}
+    {% set sub_form = true %}
+  {% endif %}
+
+  {% filter spaceless %}
+    {% if sub_form %}
+
+      {{ form_widget(form) }}
+
+    {% else %}
+
+      {% set label_inline = false %}
+      {% if 'checkbox' in block_prefixes %}
+        {% set label_inline = true %}
+      {% endif %}
+
+      {% set classes = ['hbm-form-group', 'form-group'] %}
+      {% if errors|length > 0 %}
+        {% set classes = classes|merge(['has-danger']) %}
+      {% endif %}
+
+      {% if label_inline %}
+        {% set label_attr = label_attr|appendToKey('class', ' hbm-form-label-inline') %}
+      {% endif %}
+
+      {% if description is defined and description is not null %}
+        <div class="{{ description ? 'card-separator' : 'card-divider' }}">
+          {{ description|raw }}
+        </div>
+      {% endif %}
+
+      {% set attr = card_item_attr|default({})|appendToKey('class', ' ' ~ classes|join(' ')) %}
+      <div {{ block('widget_container_attributes') }}>
+        {% if not label_inline %}
+          {{ form_label(form, null, { 'label_attr': label_attr }) }}
+        {% endif %}
+
+        <div class="hbm-form-controls">
+          {{ form_widget(form) }}
+          {% if label_inline %}
+            {{ form_label(form, null, { 'label_attr': label_attr }) }}
+          {% endif %}
+          {% if help is defined and help is not null %}
+            <small class="hbm-form-help text-muted">
+              {{ help|raw }}
+            </small>
+          {% endif %}
+          {% if dev is defined and dev is not null %}
+            <small class="hbm-form-dev text-muted">
+              {{ dev|raw }}
+            </small>
+          {% endif %}
+          {{ form_errors(form) }}
+        </div>
+      </div>
+
+    {% endif %}
+  {% endfilter %}
+{% endblock form_row %}
+
+
+
+{%- block button_row -%}
+  {{- form_widget(form) -}}
+{%- endblock button_row -%}
+
+
+
+{% block form_errors %}
+  {% filter spaceless %}
+    {% if errors|length > 0 %}
+      <ul class="hbm-alerts">
+        {% for error in errors %}
+          <li class="alert alert-danger">{{ error.message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endfilter %}
+{% endblock form_errors %}
+
+
+
+{% block form_widget -%}
+  {% if compound %}
+    {% if 'data-form-compound-card' in attr|keys %}
+      {{- block('form_widget_compound_card') -}}
+    {% else %}
+      {{- block('form_widget_compound') -}}
+    {% endif %}
+  {% else %}
+    {{- block('form_widget_simple') -}}
+  {% endif %}
+{%- endblock form_widget %}
+
+
+
+{% block form_widget_compound_card -%}
+  {% set attr = attr|appendToKey('class', ' card hbm-form-card mb-4') %}
+  <div {{ block('widget_container_attributes') }}>
+    {% set attr = card_header_attr|default({})|appendToKey('class', ' card-header') %}
+    <div {{ block('widget_container_attributes') }}>
+      {{ form_label(form) }}
+    </div>
+
+    {% if card_header_text is defined and card_header_text is not null %}
+      {% set attr = card_body_attr|default({})|appendToKey('class', ' card-body hbm-form-header-text') %}
+      <div {{ block('widget_container_attributes') }}>
+        {{ card_header_text|raw }}
+      </div>
+    {% endif %}
+
+    {% set attr = card_body_attr|default({})|appendToKey('class', ' card-body') %}
+    <div {{ block('widget_container_attributes') }}>
+      {% if card_subtitle_text is defined and card_subtitle_text is not null %}
+        {% set attr = card_subtitle_attr|default({})|appendToKey('class', ' card-subtitle') %}
+        <div {{ block('widget_container_attributes') }}>
+          {{ card_subtitle_text|raw }}
+        </div>
+      {% endif %}
+      {%- if form.parent is empty -%}
+        {{ form_errors(form) }}
+      {%- endif -%}
+      {% set attr = card_text_attr|default({})|appendToKey('class', ' card-text') %}
+      <div {{ block('widget_container_attributes') }}>
+        {{- block('form_rows') -}}
+        {{- form_rest(form) -}}
+      </div>
+    </div>
+  </div>
+{%- endblock form_widget_compound_card %}
+
+
+
+{% block form_widget_simple %}
+  {% filter spaceless %}
+    {% set type = type|default('text') %}
+    {% set classes = attr.class|default('')|token(' ') %}
+
+    {% if 'hidden' not in block_prefixes %}<span class="input-group">{% endif %}
+      <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+
+      {%- if 'read_only' in attr|keys %}
+        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
+      {%- elseif disabled %}
+        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
+      {%- elseif 'number' in block_prefixes %}
+        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-hashtag"></i></span></span>
+      {%- elseif 'email' in block_prefixes %}
+        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-envelope"></i></span></span>
+      {%- elseif 'date-picker' in classes or 'datetime-picker' in classes or type == 'datetime' %}
+        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-calendar"></i></span></span>
+      {%- elseif 'url' in block_prefixes %}
+        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-globe"></i></span></span>
+      {%- elseif 'file' in block_prefixes %}
+        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-file"></i></span></span>
+      {%- elseif 'password' in block_prefixes %}
+        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-key"></i></span></span>
+      {%- elseif 'money' in block_prefixes %}
+        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-euro-sign"></i></span></span>
+      {%- elseif 'text' in block_prefixes %}
+        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-pencil-alt"></i></span></span>
+      {% endif -%}
+  {% if 'hidden' not in block_prefixes %}</span>{% endif %}
+  {% endfilter %}
+{% endblock form_widget_simple %}
+
+
+
+{% block choice_widget_collapsed %}
+  {% set additional_classes = 'custom-select' %}
+  {{ parent() }}
+{% endblock choice_widget_collapsed %}
+
+
+
+{% block checkbox_widget %}
+  {% set additional_classes = '' %}
+
+  {% filter spaceless %}
+    <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+  {% endfilter %}
+{% endblock checkbox_widget %}
+
+
+
+{%- block money_widget -%}
+  {%- set type = type|default('money') -%}
+  {{ block('form_widget_simple') }}
+{%- endblock money_widget -%}
+
+
+
+{% block choice_widget_expanded_item %}
+  <li class="input-group">
+    <span class="input-group-prepend {{ multiple ? 'hbm-form-input-checkbox' : 'hbm-form-input-radio' }}">
+      <span class="input-group-text">
+        {{ form_widget(choice_item) }}
+      </span>
+    </span>
+    {{ form_label(choice_item, null, { 'label_attr': { 'class': 'form-control' }, 'label_raw': choice_label_raw }) }}
+  </li>
+{% endblock choice_widget_expanded_item %}
+
+
+
+{% block choice_widget_expanded %}
+  {% filter spaceless %}
+    {% set attr = attr|appendToKey('class', ' hbm-form-input-groups') %}
+    {% set attr = attr|merge({'class':attr.class|cssClasses}) %}
+
+    {% set choice_label_raw = form.vars.choice_label_raw|default(false) %}
+
+    {% set widgets = {} %}
+    {% set placeholder = null %}
+    {% for childKey, child in form %}
+      {% if childKey is same as('placeholder') %}
+        {% set placeholder = child %}
+      {% else %}
+        {% set widgets = widgets|merge({ ('formView_'~child.vars.value): child}) %}
+      {% endif %}
+    {% endfor %}
+
+    {% set widgetKeys = widgets|keys %}
+
+    <ul {{ block('widget_container_attributes') }}>
+
+      {% set choice_item = placeholder %}
+      {% if choice_item is not null %}
+        {{ block('choice_widget_expanded_item') }}
+      {% endif %}
+
+      {% for choiceKey, choiceData in form.vars.choices %}
+        {% if choiceData is instanceof('Symfony\\Component\\Form\\ChoiceList\\View\\ChoiceGroupView') %}
+          <li class="input-group">
+            <span class="input-group-header">
+              <span class="input-group-text">
+                {%- if choice_label_raw -%}{{- choiceData.label|raw -}}{%- else -%}{{- choiceData.label -}}{%- endif -%}
+              </span>
+            </span>
+          </li>
+          {% for child in choiceData.choices %}
+            {% set choice_item_key = 'formView_' ~ child.value %}
+            {% if choice_item_key in widgetKeys %}
+              {% set choice_item = widgets[choice_item_key] %}
+              {{ block('choice_widget_expanded_item') }}
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          {% set choice_item_key = 'formView_' ~ choiceData.value %}
+          {% if choice_item_key in widgetKeys %}
+            {% set choice_item = widgets[choice_item_key] %}
+            {{ block('choice_widget_expanded_item') }}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endfilter %}
+{% endblock choice_widget_expanded %}
+
+
+
+{%- block widget_attributes -%}
+  {% if additional_classes is not defined %}
+    {% set additional_classes = 'form-control' %}
+  {% endif %}
+
+  {% set attr = attr|appendToKey('class', ' ' ~ additional_classes) %}
+  {% set attr = attr|merge({'class':attr.class|cssClasses}) %}
+
+  {{ parent() }}
+{%- endblock widget_attributes -%}
+
+
+
+{#{%- block form_label -%}#}
+  {#{% set label_attr = label_attr|appendToKey('class', '') %}#}
+  {#{% set label_attr = label_attr|merge({'class':label_attr.class|cssClasses}) %}#}
+
+  {#{{ parent() }}#}
+{#{%- endblock form_label -%}#}
+
+
+
+{%- block form_label -%}
+  {% set label_attr = label_attr|appendToKey('class', '') %}
+  {% set label_attr = label_attr|merge({'class':label_attr.class|cssClasses}) %}
+  {% set label_raw = label_raw|default(false) %}
+
+  {% if label is not same as(false) -%}
+    {% if not compound -%}
+      {% set label_attr = label_attr|merge({'for': id}) %}
+    {%- endif -%}
+    {% if required -%}
+      {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+    {%- endif -%}
+    {% if label is empty -%}
+      {%- if label_format is not empty -%}
+        {% set label = label_format|replace({
+          '%name%': name,
+          '%id%': id,
+        }) %}
+      {%- else -%}
+        {% set label = name|humanize %}
+      {%- endif -%}
+    {%- endif -%}
+    <{{ element|default('label') }}{% if label_attr %}{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}>
+    {%- if translation_domain is same as(false) -%}
+      {%- if label_raw -%}{{- label|raw -}}{%- else -%}{{- label -}}{%- endif -%}
+    {%- else -%}
+      {%- if label_raw -%}{{- label|trans({}, translation_domain)|raw -}}{%- else -%}{{- label|trans({}, translation_domain) -}}{%- endif -%}
+    {%- endif -%}
+    </{{ element|default('label') }}>
+  {%- endif -%}
+{%- endblock form_label -%}

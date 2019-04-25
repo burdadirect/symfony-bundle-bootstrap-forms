@@ -1,0 +1,37 @@
+{
+  "name": "burdanews/bootstrap-form-bundle",
+  "description": "HBM Bootstrap Form Bundle - Twig template and form extensions.",
+  "author" : [{
+    "name" : "Christian Puchinger",
+    "email" : "puchinger@burda.com"
+  }],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:burdanews/bootstrap-form-bundle.git"
+  },
+  "type": "symfony-bundle",
+  "autoload": {
+    "psr-0": {
+      "HBM\\BootstrapFormBundle": ""
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php" : ">=7.1",
+    "symfony/config": "^3.4|^4.1",
+    "symfony/dependency-injection": "^3.4|^4.1",
+    "symfony/form": "^3.4|^4.1",
+    "symfony/http-kernel": "^3.4|^4.0"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master",
+    "phpunit/phpunit" : "^6.5|^7.0",
+    "symfony/phpunit-bridge": "^3.4|^4.0"
+  },
+  "target-dir": "HBM/BootstrapFormBundle"
+}

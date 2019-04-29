@@ -1,0 +1,11 @@
+{% if content is defined %}
+  <div class="hbm-custom-content-{{ type }}">
+    {% for item in content %}
+      {% if item.value is defined  %}
+        {{ item.value }}
+      {% elseif item.template is defined %}
+        {% include item.template.name with item.template.params only %}
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

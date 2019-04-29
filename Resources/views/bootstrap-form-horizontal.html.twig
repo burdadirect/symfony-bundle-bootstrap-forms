@@ -37,14 +37,18 @@
 
       {% set attr = card_item_attr|default({})|appendToKey('class', ' ' ~ classes|join(' ')) %}
       <div {{ block('widget_container_attributes') }}>
+        {% if custom_content is defined and custom_content is not null and custom_content.before_item is defined %}
+          {% include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content.before_item, 'type': 'before-item' } only %}
+        {% endif %}
+
         {% if not label_inline %}
-          {{ form_label(form, null, { 'label_attr': label_attr }) }}
+          {% include '@HBMBootstrapForm/label-with-custom-content.html.twig' %}
         {% endif %}
 
         <div class="hbm-form-controls">
           {{ form_widget(form) }}
           {% if label_inline %}
-            {{ form_label(form, null, { 'label_attr': label_attr }) }}
+            {% include '@HBMBootstrapForm/label-with-custom-content.html.twig' %}
           {% endif %}
           {% if help is defined and help is not null %}
             <small class="hbm-form-help text-muted">
@@ -58,6 +62,10 @@
           {% endif %}
           {{ form_errors(form) }}
         </div>
+
+        {% if custom_content is defined and custom_content is not null and custom_content.after_item is defined %}
+          {% include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content.after_item, 'type': 'after-item' } only %}
+        {% endif %}
       </div>
 
     {% endif %}

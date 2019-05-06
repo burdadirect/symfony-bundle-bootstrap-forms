@@ -1,9 +1,9 @@
 {
-  "name": "burdanews/bootstrap-form-bundle",
+  "name": "burdanews/symfony-bundle-bootstrap-forms",
   "description": "HBM Bootstrap Form Bundle - Twig template and form extensions.",
   "authors" : [{
     "name" : "Christian Puchinger",
-    "email" : "puchinger@burda.com"
+    "email" : "christian.puchinger@burda.com"
   }],
   "license": "MIT",
   "type": "symfony-bundle",

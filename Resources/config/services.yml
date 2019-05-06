@@ -3,7 +3,15 @@ services:
         public: true
         autowire: false
 
+    # FORM
     HBM\BootstrapFormBundle\Form\Extension\:
         resource: '../../Form/Extension'
         tags:
             - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType }
+
+    # TWIG
+    hbm.twig_extensions.bootstrap_form:
+        class: HBM\BootstrapFormBundle\Twig\BootstrapFormExtension
+        arguments: ["%hbm.bootstrap_form%"]
+        tags:
+            - { name: twig.extension }

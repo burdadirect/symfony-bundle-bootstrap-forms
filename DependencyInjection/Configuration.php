@@ -24,6 +24,24 @@ class Configuration implements ConfigurationInterface {
       $rootNode = $treeBuilder->root('hbm_bootstrap_form');
     }
 
+    $rootNode
+      ->children()
+        ->arrayNode('classes')->addDefaultsIfNotSet()
+          ->children()
+            ->scalarNode('help')->defaultValue(['text-muted'])->end()
+            ->scalarNode('dev')->defaultValue(['text-muted'])->end()
+            ->scalarNode('alerts_ul')->defaultValue([])->end()
+            ->scalarNode('alerts_li')->defaultValue(['alert', 'alert-danger'])->end()
+          ->end()
+        ->end()
+        ->arrayNode('elements')->addDefaultsIfNotSet()
+          ->children()
+            ->scalarNode('help')->defaultValue('small')->end()
+            ->scalarNode('dev')->defaultValue('small')->end()
+          ->end()
+        ->end()
+      ->end();
+
     return $treeBuilder;
   }
 

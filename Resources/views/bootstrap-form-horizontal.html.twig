@@ -51,14 +51,10 @@
             {% include '@HBMBootstrapForm/label-with-custom-content.html.twig' %}
           {% endif %}
           {% if help is defined and help is not null %}
-            <small class="hbm-form-help text-muted">
-              {{ help|raw }}
-            </small>
+            {{ hbmbfHtml(help, hbmbfElement('help'), hbmbfClasses('help', ['hbm-form-help']))|raw }}
           {% endif %}
           {% if dev is defined and dev is not null %}
-            <small class="hbm-form-dev text-muted">
-              {{ dev|raw }}
-            </small>
+            {{ hbmbfHtml(dev, hbmbfElement('dev'), hbmbfClasses('dev', ['hbm-form-dev']))|raw }}
           {% endif %}
           {{ form_errors(form) }}
         </div>
@@ -83,11 +79,11 @@
 {% block form_errors %}
   {% apply spaceless %}
     {% if errors|length > 0 %}
-      <ul class="hbm-alerts">
+      {{ hbmbfTagStart('ul', hbmbfClasses('alerts_ul', ['hbm-alerts']))|raw }}
         {% for error in errors %}
-          <li class="alert alert-danger">{{ error.message }}</li>
+          {{ hbmbfHtml(error.message, 'li', hbmbfClasses('alerts_li'))|raw }}
         {% endfor %}
-      </ul>
+      {{ hbmbfTagEnd('ul')|raw }}
     {% endif %}
   {% endapply %}
 {% endblock form_errors %}

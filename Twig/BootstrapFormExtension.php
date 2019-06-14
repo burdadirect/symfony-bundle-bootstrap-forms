@@ -50,6 +50,9 @@ class BootstrapFormExtension extends AbstractExtension {
     $customClasses = [];
     if ($key) {
       $customClasses = $this->config['classes'][$key] ?? [];
+      if (is_string($customClasses)) {
+        $customClasses = array_map('trim', explode(' ', $customClasses));
+      }
     }
 
     return array_merge($classes, $customClasses);

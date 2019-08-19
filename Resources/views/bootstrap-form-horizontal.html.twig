@@ -51,10 +51,16 @@
             {% include '@HBMBootstrapForm/label-with-custom-content.html.twig' %}
           {% endif %}
           {% if help is defined and help is not null %}
-            {{ hbmbfHtml(help, hbmbfElement('help'), hbmbfClasses('help', ['hbm-form-help']))|raw }}
+            {%- set help_element = hbmbfElement('help') %}
+            {%- set help_class = hbmbfClasses('help', ['hbm-form-help'])|join(' ') %}
+            {%- set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' ' ~ help_class)|trim}) -%}
+            {{ form_help(form, {'help_element': help_element, 'help_attr': help_attr, 'help_suffix': 'help'}) }}
           {% endif %}
           {% if dev is defined and dev is not null %}
-            {{ hbmbfHtml(dev, hbmbfElement('dev'), hbmbfClasses('dev', ['hbm-form-dev']))|raw }}
+            {%- set dev_element = hbmbfElement('dev') %}
+            {%- set dev_class = hbmbfClasses('dev', ['hbm-form-dev'])|join(' ') %}
+            {%- set dev_attr = {class: dev_class|trim} -%}
+            {{ form_help(form, {'help_element': dev_element, 'help_attr': dev_attr, 'help_suffix': 'dev', help: dev, help_html: dev_html}) }}
           {% endif %}
           {{ form_errors(form) }}
         </div>
@@ -67,6 +73,29 @@
     {% endif %}
   {% endapply %}
 {% endblock form_row %}
+
+
+
+{% block form_help -%}
+  {%- if help is not empty -%}
+    {%- set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' help-text')|trim}) -%}
+    <{{ help_element|raw }} id="{{ id }}_{{ help_suffix }}"{% with { attr: help_attr } %}{{ block('attributes') }}{% endwith %}>
+      {%- if translation_domain is same as(false) -%}
+        {%- if help_html is same as(false) -%}
+          {{- help -}}
+        {%- else -%}
+          {{- help|raw -}}
+        {%- endif -%}
+      {%- else -%}
+        {%- if help_html is same as(false) -%}
+          {{- help|trans(help_translation_parameters, translation_domain) -}}
+        {%- else -%}
+          {{- help|trans(help_translation_parameters, translation_domain)|raw -}}
+        {%- endif -%}
+      {%- endif -%}
+    </{{ help_element|raw }}>
+  {%- endif -%}
+{%- endblock form_help %}
 
 
 
@@ -218,7 +247,7 @@
     {% set attr = attr|appendToKey('class', ' hbm-form-input-groups') %}
     {% set attr = attr|merge({'class':attr.class|cssClasses}) %}
 
-    {% set choice_label_raw = form.vars.choice_label_raw|default(false) %}
+    {% set choice_label_raw = form.vars.choice_label_raw %}
 
     {% set widgets = {} %}
     {% set placeholder = null %}
@@ -282,19 +311,9 @@
 
 
 
-{#{%- block form_label -%}#}
-  {#{% set label_attr = label_attr|appendToKey('class', '') %}#}
-  {#{% set label_attr = label_attr|merge({'class':label_attr.class|cssClasses}) %}#}
-
-  {#{{ parent() }}#}
-{#{%- endblock form_label -%}#}
-
-
-
 {%- block form_label -%}
   {% set label_attr = label_attr|appendToKey('class', '') %}
   {% set label_attr = label_attr|merge({'class':label_attr.class|cssClasses}) %}
-  {% set label_raw = label_raw|default(false) %}
 
   {% if label is not same as(false) -%}
     {% if not compound -%}

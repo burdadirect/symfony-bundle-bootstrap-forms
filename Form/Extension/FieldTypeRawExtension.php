@@ -16,12 +16,10 @@ class FieldTypeRawExtension extends AbstractTypeExtension {
    * @param array                $options
    */
   public function buildForm(FormBuilderInterface $builder, array $options) {
-    if (isset($options['label_raw'])) {
-      $builder->setAttribute('label_raw', (bool)$options['label_raw']);
-    }
-    if (isset($options['choice_label_raw'])) {
-      $builder->setAttribute('choice_label_raw', (bool)$options['choice_label_raw']);
-    }
+    $builder->setAttribute('label_raw', (bool)($options['label_raw'] ?? FALSE));
+    $builder->setAttribute('choice_label_raw', (bool)($options['choice_label_raw'] ?? FALSE));
+
+    $builder->setAttribute('dev_html', (bool)($options['dev_html'] ?? FALSE));
   }
 
   /**
@@ -30,12 +28,10 @@ class FieldTypeRawExtension extends AbstractTypeExtension {
    * @param array         $options
    */
   public function buildView(FormView $view, FormInterface $form, array $options) {
-    if (isset($options['label_raw'])) {
-      $view->vars['label_raw'] = (bool)$options['label_raw'];
-    }
-    if (isset($options['choice_label_raw'])) {
-      $view->vars['choice_label_raw'] = (bool)$options['choice_label_raw'];
-    }
+    $view->vars['label_raw'] = (bool)($options['label_raw'] ?? FALSE);
+    $view->vars['choice_label_raw'] = (bool)($options['choice_label_raw'] ?? FALSE);
+
+    $view->vars['dev_html'] = (bool)($options['dev_html'] ?? FALSE);
   }
 
   /**
@@ -44,7 +40,7 @@ class FieldTypeRawExtension extends AbstractTypeExtension {
    * @param OptionsResolver $resolver
    */
   public function configureOptions(OptionsResolver $resolver) {
-    $resolver->setDefined(['label_raw', 'choice_label_raw']);
+    $resolver->setDefined(['label_raw', 'choice_label_raw', 'dev_html']);
   }
 
   /**

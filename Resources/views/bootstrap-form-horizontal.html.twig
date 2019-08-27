@@ -36,6 +36,10 @@
       {% endif %}
 
       {% set attr = card_item_attr|default({})|appendToKey('class', ' ' ~ classes|join(' ')) %}
+
+      {# Make sure the wrapper doesn't have the same id as the widget itself!#}
+      {% set id = id ~ '_wrapper' %}
+
       <div {{ block('widget_container_attributes') }}>
         {% if custom_content is defined and custom_content is not null and custom_content.before_item is defined %}
           {% include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content.before_item, 'type': 'before-item' } only %}

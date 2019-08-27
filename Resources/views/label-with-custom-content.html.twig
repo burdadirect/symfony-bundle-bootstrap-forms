@@ -1,9 +1,5 @@
-{% if custom_content is defined and custom_content is not null and custom_content.before_label is defined %}
-  {% include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content.before_label, 'type': 'before-label' } only %}
-{% endif %}
+{%- include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content['before-label']|default(null), 'type': 'before-label' } only -%}
 
 {{ form_label(form, null, { 'label_attr': label_attr }) }}
 
-{% if custom_content is defined and custom_content is not null and custom_content.after_label is defined %}
-  {% include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content.after_label, 'type': 'after-label' } only %}
-{% endif %}
+{%- include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content['after-label']|default(null), 'type': 'after-label' } only -%}

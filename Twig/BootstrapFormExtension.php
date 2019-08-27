@@ -36,14 +36,8 @@ class BootstrapFormExtension extends AbstractExtension {
   /* FUNCTIONS                                                                */
   /****************************************************************************/
 
-  public function hbmbfClass(array $classes = [], bool $withAttr = TRUE, string $sep = '') : string {
-    $classString = implode(' ', $classes);
-
-    if ($withAttr && $classString) {
-      return $sep.'class="'.$classString.'"';
-    }
-
-    return $classString;
+  public function hbmbfClass(string $key, array $classes = []) : string {
+    return implode(' ', $this->hbmbfClasses($key, $classes));
   }
 
   public function hbmbfClasses(string $key, array $classes = []) : array {
@@ -67,7 +61,12 @@ class BootstrapFormExtension extends AbstractExtension {
   }
 
   public function hbmbfTagStart(string $element, array $classes) : string {
-    return '<'.$element.$this->hbmbfClass($classes, TRUE, ' ').'>';
+    $attr = '';
+    if ($classString = implode(' ', $classes)) {
+      $attr = ' class="'.$classString.'"';
+    }
+
+    return '<'.$element.$attr.'>';
   }
 
   public function hbmbfTagEnd(string $element) : string {

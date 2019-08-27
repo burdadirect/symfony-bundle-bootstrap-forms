@@ -1,6 +1,10 @@
-{% if content is defined %}
+{% if (content is defined) and (content is iterable) %}
   {% for item in content %}
-    {% if item.value is defined  %}
+    {% if item is not iterable  %}
+      <div class="hbm-custom-content-{{ type }}">
+        {{ item }}
+      </div>
+    {% elseif item.value is defined  %}
       <div class="hbm-custom-content-{{ type }}">
         {{ item.value }}
       </div>

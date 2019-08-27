@@ -1,6 +1,11 @@
 {% use 'form_div_layout.html.twig' %}
 
 
+{% macro customContent(custom_content, key) %}
+  {%- include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content[key]|default(), 'type': key } only -%}
+{% endmacro %}
+
+
 
 {% block form_row %}
   {% set sub_form = false %}
@@ -15,58 +20,46 @@
 
     {% else %}
 
-      {% set label_inline = false %}
-      {% if 'checkbox' in block_prefixes %}
-        {% set label_inline = true %}
-      {% endif %}
-
-      {% set classes = ['hbm-form-group', 'form-group'] %}
-      {% if errors|length > 0 %}
-        {% set classes = classes|merge(['has-danger']) %}
-      {% endif %}
-
-      {% if label_inline %}
-        {% set label_attr = label_attr|appendToKey('class', ' hbm-form-label-inline') %}
-      {% endif %}
-
-      {% set attr = card_item_attr|default({})|appendToKey('class', ' ' ~ classes|join(' ')) %}
+      {{- _self.customContent(custom_content|default(), 'before-text') -}}
 
       {# Make sure the wrapper doesn't have the same id as the widget itself!#}
       {% set id = id ~ '_wrapper' %}
-
+      {% set attr = card_text_attr|default({})|appendToKey('class', ' ' ~ hbmbfClass('card_text', ['card-text', 'hbm-form-group', 'form-group'])) %}
       <div {{ block('widget_container_attributes') }}>
-        {% if custom_content is defined and custom_content is not null and custom_content.before_item is defined %}
-          {% include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content.before_item, 'type': 'before-item' } only %}
-        {% endif %}
+        {{- _self.customContent(custom_content|default(), 'before-item') -}}
 
-        {% if not label_inline %}
+        {% if 'checkbox' not in block_prefixes %}
           {% include '@HBMBootstrapForm/label-with-custom-content.html.twig' %}
         {% endif %}
 
-        <div class="hbm-form-controls">
+        {% set attr = card_item_attr|default({})|appendToKey('class', ' ' ~ hbmbfClass('card_item', ['hbm-form-controls'])) %}
+        <div {{ block('attributes') }}>
+          {{- _self.customContent(custom_content|default(), 'before-widget') -}}
           {{ form_widget(form) }}
-          {% if label_inline %}
+          {{- _self.customContent(custom_content|default(), 'after-widget') -}}
+
+          {% if 'checkbox' in block_prefixes %}
+            {% set label_attr = label_attr|appendToKey('class', ' hbm-form-label-inline') %}
             {% include '@HBMBootstrapForm/label-with-custom-content.html.twig' %}
           {% endif %}
+
+          {{- _self.customContent(custom_content|default(), 'before-help') -}}
           {% if help is defined and help is not null %}
             {%- set help_element = hbmbfElement('help') %}
-            {%- set help_class = hbmbfClasses('help', ['hbm-form-help'])|join(' ') %}
-            {%- set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' ' ~ help_class)|trim}) -%}
+            {%- set help_attr = help_attr|appendToKey('class', ' ' ~ hbmbfClass('help', ['hbm-form-help'])) -%}
             {{ form_help(form, {'help_element': help_element, 'help_attr': help_attr, 'help_suffix': 'help'}) }}
           {% endif %}
-          {% if dev is defined and dev is not null %}
-            {%- set dev_element = hbmbfElement('dev') %}
-            {%- set dev_class = hbmbfClasses('dev', ['hbm-form-dev'])|join(' ') %}
-            {%- set dev_attr = {class: dev_class|trim} -%}
-            {{ form_help(form, {'help_element': dev_element, 'help_attr': dev_attr, 'help_suffix': 'dev', help: dev, help_html: dev_html}) }}
-          {% endif %}
+          {{- _self.customContent(custom_content|default(), 'after-help') -}}
+
+          {{- _self.customContent(custom_content|default(), 'before-error') -}}
           {{ form_errors(form) }}
+          {{- _self.customContent(custom_content|default(), 'after-error') -}}
         </div>
 
-        {% if custom_content is defined and custom_content is not null and custom_content.after_item is defined %}
-          {% include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content.after_item, 'type': 'after-item' } only %}
-        {% endif %}
+        {{- _self.customContent(custom_content|default(), 'after-item') -}}
       </div>
+
+      {{- _self.customContent(custom_content|default(), 'after-text') -}}
 
     {% endif %}
   {% endapply %}
@@ -119,7 +112,7 @@
 
 {% block form_widget -%}
   {% if compound %}
-    {% if 'data-form-compound-card' in attr|keys %}
+    {% if card|default(false) %}
       {{- block('form_widget_compound_card') -}}
     {% else %}
       {{- block('form_widget_compound') -}}
@@ -132,40 +125,34 @@
 
 
 {% block form_widget_compound_card -%}
-  {% set attr = attr|appendToKey('class', ' card hbm-form-card mb-4') %}
+  {% set attr = attr|merge(card_attr|default({}))|appendToKey('class', ' ' ~ hbmbfClass('card', ['card', 'hbm-form-card'])) %}
   <div {{ block('widget_container_attributes') }}>
-    {% set attr = card_header_attr|default({})|appendToKey('class', ' card-header') %}
-    <div {{ block('widget_container_attributes') }}>
+    {{- _self.customContent(custom_content|default(), 'before-header') -}}
+
+    {% set attr = card_header_attr|default({})|appendToKey('class', ' ' ~ hbmbfClass('card_header', ['card-header', 'hbm-form-header'])) %}
+    <div {{ block('attributes') }}>
+      {{- _self.customContent(custom_content|default(), 'before-headline') -}}
       {{ form_label(form) }}
+      {{- _self.customContent(custom_content|default(), 'after-headline') -}}
     </div>
 
-    {% if custom_content is defined and custom_content is not null and custom_content.before_body is defined %}
-      {% include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content.before_body, 'type': 'before-body' } only %}
-    {% endif %}
+    {{- _self.customContent(custom_content|default(), 'after-header') -}}
+    {{- _self.customContent(custom_content|default(), 'before-body') -}}
 
-    {% set attr = card_body_attr|default({})|appendToKey('class', ' card-body') %}
-    <div {{ block('widget_container_attributes') }}>
-      {% if custom_content is defined and custom_content is not null and custom_content.before_rows is defined %}
-        {% include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content.before_rows, 'type': 'before-rows' } only %}
-      {% endif %}
+    {% set attr = card_body_attr|default({})|appendToKey('class', ' ' ~ hbmbfClass('card_body', ['card-body', 'hbm-form-body', 'hbm-form-body-collapsible'])) %}
+    <div {{ block('attributes') }}>
+      {{- _self.customContent(custom_content|default(), 'before-rows') -}}
 
       {%- if form.parent is empty -%}
         {{ form_errors(form) }}
       {%- endif -%}
-      {% set attr = card_text_attr|default({})|appendToKey('class', ' card-text') %}
-      <div {{ block('widget_container_attributes') }}>
-        {{- block('form_rows') -}}
-        {{- form_rest(form) -}}
-      </div>
+      {{- block('form_rows') -}}
+      {{- form_rest(form) -}}
 
-      {% if custom_content is defined and custom_content is not null and custom_content.after_rows is defined %}
-        {% include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content.after_rows, 'type': 'after-rows' } only %}
-      {% endif %}
+      {{- _self.customContent(custom_content|default(), 'after-rows') -}}
     </div>
 
-    {% if custom_content is defined and custom_content is not null and custom_content.after_body is defined %}
-      {% include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content.after_body, 'type': 'after-body' } only %}
-    {% endif %}
+    {{- _self.customContent(custom_content|default(), 'after-body') -}}
   </div>
 {%- endblock form_widget_compound_card %}
 

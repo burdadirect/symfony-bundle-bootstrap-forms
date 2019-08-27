@@ -15,7 +15,9 @@ class FieldTypeCardExtension extends AbstractTypeExtension {
    * @var array
    */
   private $keys = [
+    'card',
     'card_attr',
+    'card_header_attr',
     'card_body_attr',
     'card_text_attr',
     'card_item_attr',

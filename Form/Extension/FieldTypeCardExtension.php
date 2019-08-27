@@ -16,11 +16,7 @@ class FieldTypeCardExtension extends AbstractTypeExtension {
    */
   private $keys = [
     'card_attr',
-    'card_header_attr',
-    'card_header_text',
     'card_body_attr',
-    'card_subtitle_attr',
-    'card_subtitle_text',
     'card_text_attr',
     'card_item_attr',
   ];

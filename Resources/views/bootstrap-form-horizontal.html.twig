@@ -29,12 +29,6 @@
         {% set label_attr = label_attr|appendToKey('class', ' hbm-form-label-inline') %}
       {% endif %}
 
-      {% if description is defined and description is not null %}
-        <div class="{{ description ? 'card-separator' : 'card-divider' }}">
-          {{ description|raw }}
-        </div>
-      {% endif %}
-
       {% set attr = card_item_attr|default({})|appendToKey('class', ' ' ~ classes|join(' ')) %}
 
       {# Make sure the wrapper doesn't have the same id as the widget itself!#}
@@ -145,21 +139,16 @@
       {{ form_label(form) }}
     </div>
 
-    {% if card_header_text is defined and card_header_text is not null %}
-      {% set attr = card_body_attr|default({})|appendToKey('class', ' card-body hbm-form-header-text') %}
-      <div {{ block('widget_container_attributes') }}>
-        {{ card_header_text|raw }}
-      </div>
+    {% if custom_content is defined and custom_content is not null and custom_content.before_body is defined %}
+      {% include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content.before_body, 'type': 'before-body' } only %}
     {% endif %}
 
     {% set attr = card_body_attr|default({})|appendToKey('class', ' card-body') %}
     <div {{ block('widget_container_attributes') }}>
-      {% if card_subtitle_text is defined and card_subtitle_text is not null %}
-        {% set attr = card_subtitle_attr|default({})|appendToKey('class', ' card-subtitle') %}
-        <div {{ block('widget_container_attributes') }}>
-          {{ card_subtitle_text|raw }}
-        </div>
+      {% if custom_content is defined and custom_content is not null and custom_content.before_rows is defined %}
+        {% include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content.before_rows, 'type': 'before-rows' } only %}
       {% endif %}
+
       {%- if form.parent is empty -%}
         {{ form_errors(form) }}
       {%- endif -%}
@@ -168,7 +157,15 @@
         {{- block('form_rows') -}}
         {{- form_rest(form) -}}
       </div>
+
+      {% if custom_content is defined and custom_content is not null and custom_content.after_rows is defined %}
+        {% include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content.after_rows, 'type': 'after-rows' } only %}
+      {% endif %}
     </div>
+
+    {% if custom_content is defined and custom_content is not null and custom_content.after_body is defined %}
+      {% include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content.after_body, 'type': 'after-body' } only %}
+    {% endif %}
   </div>
 {%- endblock form_widget_compound_card %}
 

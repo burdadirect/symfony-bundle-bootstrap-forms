@@ -172,6 +172,8 @@
         <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
       {%- elseif 'number' in block_prefixes %}
         <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-hashtag"></i></span></span>
+      {%- elseif 'color' in block_prefixes %}
+        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-palette"></i></span></span>
       {%- elseif 'email' in block_prefixes %}
         <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-envelope"></i></span></span>
       {%- elseif 'date-picker' in classes or 'datetime-picker' in classes or type == 'datetime' %}

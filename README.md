@@ -60,11 +60,11 @@ hbm_bootstrap_form:
       'card_body_attr' => [],
  
       // Toggle will be shown, card is open.
-      'attr' => ['data-card-collapsible' => 'open']
+      'attr' => ['data-card-collapsible' => 'open'],
       // Toggle will be shown, card is closed.
-      'attr' => ['data-card-collapsible' => 'open']
+      'attr' => ['data-card-collapsible' => 'open'],
       // Toggle will be not be shown, card is open.
-      'attr' => ['data-card-collapsible' => '']
+      'attr' => ['data-card-collapsible' => ''],
 
       // Will insert multiple custom contents at the defined position.
       'custom_content' => [

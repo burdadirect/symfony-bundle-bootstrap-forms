@@ -9,7 +9,7 @@
   "type": "symfony-bundle",
   "autoload": {
     "psr-4": {
-      "HBM\\BootstrapFormBundle": ""
+      "HBM\\BootstrapFormBundle": "HBM/BootstrapFormBundle"
     }
   },
   "require": {
@@ -22,6 +22,5 @@
   },
   "require-dev": {
     "roave/security-advisories": "dev-master"
-  },
-  "target-dir": "HBM/BootstrapFormBundle"
+  }
 }

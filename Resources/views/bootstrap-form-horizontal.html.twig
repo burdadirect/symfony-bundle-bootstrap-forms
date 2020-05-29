@@ -139,7 +139,7 @@
     {{- _self.customContent(custom_content|default(), 'after-header') -}}
     {{- _self.customContent(custom_content|default(), 'before-body') -}}
 
-    {% set attr = card_body_attr|default({})|appendToKey('class', ' ' ~ hbmbfClass('card_body', ['card-body', 'hbm-form-body', 'hbm-form-body-collapsible'])) %}
+    {% set attr = card_body_attr|default({})|appendToKey('class', ' ' ~ hbmbfClass('card_body', ['card-body', 'hbm-form-body', 'card-body-collapsible'])) %}
     <div {{ block('attributes') }}>
       {{- _self.customContent(custom_content|default(), 'before-rows') -}}
 

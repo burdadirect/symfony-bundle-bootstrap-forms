@@ -22,9 +22,10 @@
 
       {{- _self.customContent(custom_content|default(), 'before-text') -}}
 
-      {# Make sure the wrapper doesn't have the same id as the widget itself!#}
+      {# Make sure the wrapper doesn't have the same id as the widget itself! #}
       {% set id = id ~ '_wrapper' %}
-      {% set attr = card_text_attr|default({})|appendToKey('class', ' ' ~ hbmbfClass('card_text', ['card-text', 'hbm-form-group', 'form-group'])) %}
+      {% set attr = row_attr|merge(card_text_attr|default({})) %}
+      {% set attr = attr|appendToKey('class', ' ' ~ hbmbfClass('card_text', ['card-text', 'hbm-form-group', 'form-group'])) %}
       <div {{ block('widget_container_attributes') }}>
         {{- _self.customContent(custom_content|default(), 'before-item') -}}
 

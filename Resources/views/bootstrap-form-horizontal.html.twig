@@ -13,57 +13,55 @@
     {% set sub_form = true %}
   {% endif %}
 
-  {% apply spaceless %}
-    {% if sub_form %}
+  {% if sub_form %}
 
-      {{ form_widget(form) }}
+    {{ form_widget(form) }}
 
-    {% else %}
+  {% else %}
 
-      {{- _self.customContent(custom_content|default(), 'before-text') -}}
+    {{- _self.customContent(custom_content|default(), 'before-text') -}}
 
-      {# Make sure the wrapper doesn't have the same id as the widget itself! #}
-      {% set id = id ~ '_wrapper' %}
-      {% set attr = row_attr|merge(card_text_attr|default({})) %}
-      {% set attr = attr|appendToKey('class', ' ' ~ hbmbfClass('card_text', ['card-text', 'hbm-form-group', 'form-group'])) %}
-      <div {{ block('widget_container_attributes') }}>
-        {{- _self.customContent(custom_content|default(), 'before-item') -}}
+    {# Make sure the wrapper doesn't have the same id as the widget itself! #}
+    {% set id = id ~ '_wrapper' %}
+    {% set attr = row_attr|merge(card_text_attr|default({})) %}
+    {% set attr = attr|appendToKey('class', ' ' ~ hbmbfClass('card_text', ['card-text', 'hbm-form-group', 'form-group'])) %}
+    <div {{ block('widget_container_attributes') }}>
+      {{- _self.customContent(custom_content|default(), 'before-item') -}}
 
-        {% if 'checkbox' not in block_prefixes %}
+      {% if 'checkbox' not in block_prefixes %}
+        {% include '@HBMBootstrapForm/label-with-custom-content.html.twig' %}
+      {% endif %}
+
+      {% set attr = card_item_attr|default({})|appendToKey('class', ' ' ~ hbmbfClass('card_item', ['hbm-form-controls'])) %}
+      <div {{ block('attributes') }}>
+        {{- _self.customContent(custom_content|default(), 'before-widget') -}}
+        {{ form_widget(form) }}
+        {{- _self.customContent(custom_content|default(), 'after-widget') -}}
+
+        {% if 'checkbox' in block_prefixes %}
+          {% set label_attr = label_attr|appendToKey('class', ' hbm-form-label-inline') %}
           {% include '@HBMBootstrapForm/label-with-custom-content.html.twig' %}
         {% endif %}
 
-        {% set attr = card_item_attr|default({})|appendToKey('class', ' ' ~ hbmbfClass('card_item', ['hbm-form-controls'])) %}
-        <div {{ block('attributes') }}>
-          {{- _self.customContent(custom_content|default(), 'before-widget') -}}
-          {{ form_widget(form) }}
-          {{- _self.customContent(custom_content|default(), 'after-widget') -}}
+        {{- _self.customContent(custom_content|default(), 'before-help') -}}
+        {% if help is defined and help is not null %}
+          {%- set help_element = hbmbfElement('help') %}
+          {%- set help_attr = help_attr|appendToKey('class', ' ' ~ hbmbfClass('help', ['hbm-form-help'])) -%}
+          {{ form_help(form, {'help_element': help_element, 'help_attr': help_attr, 'help_suffix': 'help'}) }}
+        {% endif %}
+        {{- _self.customContent(custom_content|default(), 'after-help') -}}
 
-          {% if 'checkbox' in block_prefixes %}
-            {% set label_attr = label_attr|appendToKey('class', ' hbm-form-label-inline') %}
-            {% include '@HBMBootstrapForm/label-with-custom-content.html.twig' %}
-          {% endif %}
-
-          {{- _self.customContent(custom_content|default(), 'before-help') -}}
-          {% if help is defined and help is not null %}
-            {%- set help_element = hbmbfElement('help') %}
-            {%- set help_attr = help_attr|appendToKey('class', ' ' ~ hbmbfClass('help', ['hbm-form-help'])) -%}
-            {{ form_help(form, {'help_element': help_element, 'help_attr': help_attr, 'help_suffix': 'help'}) }}
-          {% endif %}
-          {{- _self.customContent(custom_content|default(), 'after-help') -}}
-
-          {{- _self.customContent(custom_content|default(), 'before-error') -}}
-          {{ form_errors(form) }}
-          {{- _self.customContent(custom_content|default(), 'after-error') -}}
-        </div>
-
-        {{- _self.customContent(custom_content|default(), 'after-item') -}}
+        {{- _self.customContent(custom_content|default(), 'before-error') -}}
+        {{ form_errors(form) }}
+        {{- _self.customContent(custom_content|default(), 'after-error') -}}
       </div>
 
-      {{- _self.customContent(custom_content|default(), 'after-text') -}}
+      {{- _self.customContent(custom_content|default(), 'after-item') -}}
+    </div>
 
-    {% endif %}
-  {% endapply %}
+    {{- _self.customContent(custom_content|default(), 'after-text') -}}
+
+  {% endif %}
 {% endblock form_row %}
 
 
@@ -72,19 +70,19 @@
   {%- if help is not empty -%}
     {%- set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' help-text')|trim}) -%}
     <{{ help_element|raw }} id="{{ id }}_{{ help_suffix }}"{% with { attr: help_attr } %}{{ block('attributes') }}{% endwith %}>
-      {%- if translation_domain is same as(false) -%}
-        {%- if help_html is same as(false) -%}
-          {{- help -}}
-        {%- else -%}
-          {{- help|raw -}}
-        {%- endif -%}
+    {%- if translation_domain is same as(false) -%}
+      {%- if help_html is same as(false) -%}
+        {{- help -}}
       {%- else -%}
-        {%- if help_html is same as(false) -%}
-          {{- help|trans(help_translation_parameters, translation_domain) -}}
-        {%- else -%}
-          {{- help|trans(help_translation_parameters, translation_domain)|raw -}}
-        {%- endif -%}
+        {{- help|raw -}}
       {%- endif -%}
+    {%- else -%}
+      {%- if help_html is same as(false) -%}
+        {{- help|trans(help_translation_parameters, translation_domain) -}}
+      {%- else -%}
+        {{- help|trans(help_translation_parameters, translation_domain)|raw -}}
+      {%- endif -%}
+    {%- endif -%}
     </{{ help_element|raw }}>
   {%- endif -%}
 {%- endblock form_help %}
@@ -98,15 +96,13 @@
 
 
 {% block form_errors %}
-  {% apply spaceless %}
-    {% if errors|length > 0 %}
-      {{ hbmbfTagStart('ul', hbmbfClasses('alerts_ul', ['hbm-alerts']))|raw }}
-        {% for error in errors %}
-          {{ hbmbfHtml(error.message, 'li', hbmbfClasses('alerts_li'))|raw }}
-        {% endfor %}
-      {{ hbmbfTagEnd('ul')|raw }}
-    {% endif %}
-  {% endapply %}
+  {% if errors|length > 0 %}
+    {{ hbmbfTagStart('ul', hbmbfClasses('alerts_ul', ['hbm-alerts']))|raw }}
+    {% for error in errors %}
+      {{ hbmbfHtml(error.message, 'li', hbmbfClasses('alerts_li'))|raw }}
+    {% endfor %}
+    {{ hbmbfTagEnd('ul')|raw }}
+  {% endif %}
 {% endblock form_errors %}
 
 
@@ -160,55 +156,50 @@
 
 
 {% block form_widget_simple %}
-  {% apply spaceless %}
-    {% set type = type|default('text') %}
-    {% set classes = attr.class|default('')|token(' ') %}
+  {% set type = type|default('text') %}
+  {% set classes = attr.class|default('')|token(' ') %}
 
-    {% if 'hidden' not in block_prefixes %}<span class="input-group">{% endif %}
-      <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+  {% if 'hidden' not in block_prefixes %}<span class="input-group">{% endif %}
+  <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
 
-      {%- if 'read_only' in attr|keys %}
-        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
-      {%- elseif disabled %}
-        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
-      {%- elseif 'number' in block_prefixes %}
-        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-hashtag"></i></span></span>
-      {%- elseif 'color' in block_prefixes %}
-        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-palette"></i></span></span>
-      {%- elseif 'email' in block_prefixes %}
-        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-envelope"></i></span></span>
-      {%- elseif 'date-picker' in classes or 'datetime-picker' in classes or type == 'datetime' %}
-        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-calendar"></i></span></span>
-      {%- elseif 'url' in block_prefixes %}
-        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-globe"></i></span></span>
-      {%- elseif 'file' in block_prefixes %}
-        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-file"></i></span></span>
-      {%- elseif 'password' in block_prefixes %}
-        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-key"></i></span></span>
-      {%- elseif 'money' in block_prefixes %}
-        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-euro-sign"></i></span></span>
-      {%- elseif 'text' in block_prefixes %}
-        <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-pencil-alt"></i></span></span>
-      {% endif -%}
+  {%- if 'read_only' in attr|keys %}
+    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
+    {%- elseif disabled %}
+    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
+    {%- elseif 'number' in block_prefixes %}
+    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-hashtag"></i></span></span>
+    {%- elseif 'color' in block_prefixes %}
+    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-palette"></i></span></span>
+    {%- elseif 'email' in block_prefixes %}
+    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-envelope"></i></span></span>
+    {%- elseif 'date-picker' in classes or 'datetime-picker' in classes or type == 'datetime' %}
+    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-calendar"></i></span></span>
+    {%- elseif 'url' in block_prefixes %}
+    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-globe"></i></span></span>
+    {%- elseif 'file' in block_prefixes %}
+    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-file"></i></span></span>
+    {%- elseif 'password' in block_prefixes %}
+    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-key"></i></span></span>
+    {%- elseif 'money' in block_prefixes %}
+    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-euro-sign"></i></span></span>
+    {%- elseif 'text' in block_prefixes %}
+    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-pencil-alt"></i></span></span>
+  {% endif -%}
   {% if 'hidden' not in block_prefixes %}</span>{% endif %}
-  {% endapply %}
 {% endblock form_widget_simple %}
 
 
 
 {% block choice_widget_collapsed %}
-  {% set additional_classes = 'custom-select' %}
+  {%- set additional_classes = 'custom-select' -%}
   {{ parent() }}
 {% endblock choice_widget_collapsed %}
 
 
 
 {% block checkbox_widget %}
-  {% set additional_classes = '' %}
-
-  {% apply spaceless %}
-    <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
-  {% endapply %}
+  {%- set additional_classes = '' -%}
+  <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
 {% endblock checkbox_widget %}
 
 
@@ -234,67 +225,61 @@
 
 
 {% block choice_widget_expanded %}
-  {% apply spaceless %}
-    {% set attr = attr|appendToKey('class', ' hbm-form-input-groups') %}
-    {% set attr = attr|merge({'class':attr.class|cssClasses}) %}
+  {% set attr = attr|appendToKey('class', ' hbm-form-input-groups') %}
+  {% set attr = attr|merge({'class':attr.class|cssClasses}) %}
 
-    {% set choice_label_raw = form.vars.choice_label_raw %}
+  {% set choice_label_raw = form.vars.choice_label_raw %}
 
-    {% set widgets = {} %}
-    {% set placeholder = null %}
-    {% for childKey, child in form %}
-      {% if childKey is same as('placeholder') %}
-        {% set placeholder = child %}
-      {% else %}
-        {% set widgets = widgets|merge({ ('formView_'~child.vars.value): child}) %}
-      {% endif %}
-    {% endfor %}
+  {% set widgets = {} %}
+  {% set placeholder = null %}
+  {% for childKey, child in form %}
+    {% if childKey is same as('placeholder') %}
+      {% set placeholder = child %}
+    {% else %}
+      {% set widgets = widgets|merge({ ('formView_'~child.vars.value): child}) %}
+    {% endif %}
+  {% endfor %}
 
-    {% set widgetKeys = widgets|keys %}
+  {% set widgetKeys = widgets|keys %}
 
-    <ul {{ block('widget_container_attributes') }}>
+  <ul {{ block('widget_container_attributes') }}>
 
-      {% set choice_item = placeholder %}
-      {% if choice_item is not null %}
-        {{ block('choice_widget_expanded_item') }}
-      {% endif %}
+    {% set choice_item = placeholder %}
+    {% if choice_item is not null %}
+      {{ block('choice_widget_expanded_item') }}
+    {% endif %}
 
-      {% for choiceKey, choiceData in form.vars.choices %}
-        {% if choiceData is instanceof('Symfony\\Component\\Form\\ChoiceList\\View\\ChoiceGroupView') %}
-          <li class="input-group">
-            <span class="input-group-header">
-              <span class="input-group-text">
-                {%- if choice_label_raw -%}{{- choiceData.label|raw -}}{%- else -%}{{- choiceData.label -}}{%- endif -%}
-              </span>
+    {% for choiceKey, choiceData in form.vars.choices %}
+      {% if choiceData is instanceof('Symfony\\Component\\Form\\ChoiceList\\View\\ChoiceGroupView') %}
+        <li class="input-group">
+          <span class="input-group-header">
+            <span class="input-group-text">
+              {%- if choice_label_raw -%}{{- choiceData.label|raw -}}{%- else -%}{{- choiceData.label -}}{%- endif -%}
             </span>
-          </li>
-          {% for child in choiceData.choices %}
-            {% set choice_item_key = 'formView_' ~ child.value %}
-            {% if choice_item_key in widgetKeys %}
-              {% set choice_item = widgets[choice_item_key] %}
-              {{ block('choice_widget_expanded_item') }}
-            {% endif %}
-          {% endfor %}
-        {% else %}
-          {% set choice_item_key = 'formView_' ~ choiceData.value %}
+          </span>
+        </li>
+        {% for child in choiceData.choices %}
+          {% set choice_item_key = 'formView_' ~ child.value %}
           {% if choice_item_key in widgetKeys %}
             {% set choice_item = widgets[choice_item_key] %}
             {{ block('choice_widget_expanded_item') }}
           {% endif %}
+        {% endfor %}
+      {% else %}
+        {% set choice_item_key = 'formView_' ~ choiceData.value %}
+        {% if choice_item_key in widgetKeys %}
+          {% set choice_item = widgets[choice_item_key] %}
+          {{ block('choice_widget_expanded_item') }}
         {% endif %}
-      {% endfor %}
-    </ul>
-  {% endapply %}
+      {% endif %}
+    {% endfor %}
+  </ul>
 {% endblock choice_widget_expanded %}
 
 
 
 {%- block widget_attributes -%}
-  {% if additional_classes is not defined %}
-    {% set additional_classes = 'form-control' %}
-  {% endif %}
-
-  {% set attr = attr|appendToKey('class', ' ' ~ additional_classes) %}
+  {% set attr = attr|appendToKey('class', ' ' ~ additional_classes ?? 'form-control') %}
   {% set attr = attr|merge({'class':attr.class|cssClasses}) %}
 
   {{ parent() }}

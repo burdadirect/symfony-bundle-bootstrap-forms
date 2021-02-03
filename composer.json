@@ -1,5 +1,5 @@
 {
-  "name": "burdanews/symfony-bundle-bootstrap-forms",
+  "name": "burdadirect/symfony-bundle-bootstrap-forms",
   "description": "HBM Bootstrap Form Bundle - Twig template and form extensions.",
   "authors" : [{
     "name" : "Christian Puchinger",

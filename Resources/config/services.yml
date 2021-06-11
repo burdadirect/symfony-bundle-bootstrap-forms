@@ -7,7 +7,7 @@ services:
     HBM\BootstrapFormBundle\Form\Extension\:
         resource: '../../Form/Extension'
         tags:
-            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType }
+            - { name: form.type_extension }
 
     # TWIG
     hbm.twig_extensions.bootstrap_form:

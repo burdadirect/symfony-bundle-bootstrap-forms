@@ -3,13 +3,15 @@
 namespace HBM\BootstrapFormBundle\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FieldTypeRawExtension extends AbstractTypeExtension {
+class FieldTypeRawLabelExtension extends AbstractTypeExtension {
 
   /**
    * @param FormBuilderInterface $builder
@@ -17,7 +19,6 @@ class FieldTypeRawExtension extends AbstractTypeExtension {
    */
   public function buildForm(FormBuilderInterface $builder, array $options) {
     $builder->setAttribute('label_raw', (bool)($options['label_raw'] ?? FALSE));
-    $builder->setAttribute('choice_label_raw', (bool)($options['choice_label_raw'] ?? FALSE));
   }
 
   /**
@@ -27,7 +28,6 @@ class FieldTypeRawExtension extends AbstractTypeExtension {
    */
   public function buildView(FormView $view, FormInterface $form, array $options) {
     $view->vars['label_raw'] = (bool)($options['label_raw'] ?? FALSE);
-    $view->vars['choice_label_raw'] = (bool)($options['choice_label_raw'] ?? FALSE);
   }
 
   /**
@@ -36,14 +36,14 @@ class FieldTypeRawExtension extends AbstractTypeExtension {
    * @param OptionsResolver $resolver
    */
   public function configureOptions(OptionsResolver $resolver) {
-    $resolver->setDefined(['label_raw', 'choice_label_raw']);
+    $resolver->setDefined(['label_raw']);
   }
 
   /**
    * @return array
    */
   public static function getExtendedTypes() : iterable {
-    return [FormType::class];
+    return [FormType::class, SubmitType::class];
   }
 
 }

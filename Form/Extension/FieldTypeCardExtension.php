@@ -15,12 +15,12 @@ class FieldTypeCardExtension extends AbstractTypeExtension {
    * @var array
    */
   private $keys = [
-    'card',
-    'card_attr',
-    'card_header_attr',
-    'card_body_attr',
-    'card_text_attr',
-    'card_item_attr',
+    'card' => false,
+    'card_attr' => [],
+    'card_header_attr' => [],
+    'card_body_attr' => [],
+    'card_text_attr' => [],
+    'card_item_attr' => [],
   ];
 
   /**
@@ -28,10 +28,8 @@ class FieldTypeCardExtension extends AbstractTypeExtension {
    * @param array                $options
    */
   public function buildForm(FormBuilderInterface $builder, array $options) {
-    foreach ($this->keys as $key) {
-      if (isset($options[$key])) {
-        $builder->setAttribute($key, $options[$key]);
-      }
+    foreach ($this->keys as $key => $default) {
+      $builder->setAttribute($key, $options[$key] ?? $default);
     }
   }
 
@@ -41,10 +39,8 @@ class FieldTypeCardExtension extends AbstractTypeExtension {
    * @param array         $options
    */
   public function buildView(FormView $view, FormInterface $form, array $options) {
-    foreach ($this->keys as $key) {
-      if (isset($options[$key])) {
-        $view->vars[$key] = $options[$key];
-      }
+    foreach ($this->keys as $key => $default) {
+      $view->vars[$key] = $options[$key] ?? $default;
     }
   }
 
@@ -54,9 +50,7 @@ class FieldTypeCardExtension extends AbstractTypeExtension {
    * @param OptionsResolver $resolver
    */
   public function configureOptions(OptionsResolver $resolver) {
-    foreach ($this->keys as $key) {
-      $resolver->setDefined([$key]);
-    }
+    $resolver->setDefined(array_keys($this->keys));
   }
 
   /**

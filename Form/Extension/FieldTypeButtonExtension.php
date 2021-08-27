@@ -17,9 +17,9 @@ class FieldTypeButtonExtension extends AbstractTypeExtension {
    * @var array
    */
   private $keys = [
-    'button',
-    'button_attr',
-    'button_group_attr',
+    'button' => false,
+    'button_attr' => [],
+    'button_group_attr' => [],
   ];
 
   /**
@@ -27,10 +27,8 @@ class FieldTypeButtonExtension extends AbstractTypeExtension {
    * @param array                $options
    */
   public function buildForm(FormBuilderInterface $builder, array $options) {
-    foreach ($this->keys as $key) {
-      if (isset($options[$key])) {
-        $builder->setAttribute($key, $options[$key]);
-      }
+    foreach ($this->keys as $key => $default) {
+      $builder->setAttribute($key, $options[$key] ?? $default);
     }
   }
 
@@ -40,10 +38,8 @@ class FieldTypeButtonExtension extends AbstractTypeExtension {
    * @param array         $options
    */
   public function buildView(FormView $view, FormInterface $form, array $options) {
-    foreach ($this->keys as $key) {
-      if (isset($options[$key])) {
-        $view->vars[$key] = $options[$key];
-      }
+    foreach ($this->keys as $key => $default) {
+      $view->vars[$key] = $options[$key] ?? $default;
     }
   }
 
@@ -53,9 +49,7 @@ class FieldTypeButtonExtension extends AbstractTypeExtension {
    * @param OptionsResolver $resolver
    */
   public function configureOptions(OptionsResolver $resolver) {
-    foreach ($this->keys as $key) {
-      $resolver->setDefined([$key]);
-    }
+    $resolver->setDefined(array_keys($this->keys));
   }
 
   /**

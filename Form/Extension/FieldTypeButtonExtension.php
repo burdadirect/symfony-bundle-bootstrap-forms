@@ -19,7 +19,8 @@ class FieldTypeButtonExtension extends AbstractTypeExtension {
   private $keys = [
     'button' => false,
     'button_attr' => [],
-    'button_group_attr' => [],
+    'button_items_attr' => [],
+    'button_container_attr' => [],
   ];
 
   /**

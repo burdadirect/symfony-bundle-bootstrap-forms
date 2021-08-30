@@ -220,98 +220,119 @@
 
 
 {% block choice_widget_expanded %}
-  {% set widgets = {} %}
-  {% set placeholder = null %}
-  {% for childKey, child in form %}
-    {% if childKey is same as('placeholder') %}
-      {% set placeholder = child %}
-    {% else %}
-      {% set widgets = widgets|merge({ ('formView_'~child.vars.value): child}) %}
-    {% endif %}
-  {% endfor %}
-
-  {% set widgetKeys = widgets|keys %}
 
   {% set element = tag('ul', attr).class('hbm-form-input-groups').id(id|default) %}
-  {% set item_block = 'choice_widget_expanded_item_ul' %}
-  {% set optgroup_block = 'choice_widget_expanded_optgroup_ul' %}
   {% if button|default(false) %}
-    {% set item_block = 'choice_widget_expanded_item_btn' %}
-    {% set optgroup_block = 'choice_widget_expanded_optgroup_btn' %}
     {% set element = element.tag('div').add(button_container_attr).set('data-toggle', 'buttons').class(hbmbfClasses('button_container')) %}
-  {% endif %}
+  {%- endif -%}
 
   {{ element.open|raw }}
+
     {{- _self.customContent(custom_content|default(), 'before-choices') -}}
 
     {% if placeholder is not null %}
-      {% set choice_item = placeholder %}
-      {{ block(item_block) }}
-    {% endif %}
+      {% set childKey = 'placeholder' %}
+      {{- block('choice_widget_expanded_option') -}}
+    {%- endif -%}
 
-    {% for choiceKey, choiceData in form.vars.choices %}
-      {% if choiceData is instanceof('Symfony\\Component\\Form\\ChoiceList\\View\\ChoiceGroupView') %}
-        {{ block(optgroup_block) }}
-        {% for child in choiceData.choices %}
-          {% set choice_item_key = 'formView_' ~ child.value %}
-          {% if choice_item_key in widgetKeys %}
-            {% set choice_item = widgets[choice_item_key] %}
-            {{ block(item_block) }}
-          {% endif %}
-        {% endfor %}
-      {% else %}
-        {% set choice_item_key = 'formView_' ~ choiceData.value %}
-        {% if choice_item_key in widgetKeys %}
-          {% set choice_item = widgets[choice_item_key] %}
-          {{ block(item_block) }}
-        {% endif %}
-      {% endif %}
-    {% endfor %}
+    {%- if preferred_choices|length > 0 -%}
+      {% set options = preferred_choices %}
+      {{- block('choice_widget_expanded_options') -}}
+
+      {%- if separator is not none -%}
+        {{- block('choice_widget_expanded_options_separator') -}}
+      {%- endif -%}
+    {%- endif -%}
+
+    {% set options = choices %}
+    {{- block('choice_widget_expanded_options') -}}
 
     {{- _self.customContent(custom_content|default(), 'after-choices') -}}
 
   {{ element.close|raw }}
+
 {% endblock choice_widget_expanded %}
 
 
 
-{% block choice_widget_expanded_optgroup_btn %}
-  {{ _self.labelRawAndOrTranslated(choiceData.label, choice_label_raw, choice_translation_domain) }}
-{% endblock choice_widget_expanded_optgroup_btn %}
+{% block choice_widget_expanded_options %}
+  {% for labelOrKey, choice in options %}
+    {%- if choice is iterable -%}
+      {# Render option group #}
+      {{- block('choice_widget_expanded_options_header') -}}
+
+      {% set options = choice %}
+      {{- block('choice_widget_expanded_options') -}}
+    {%- else -%}
+      {# Render option item #}
+      {% set childKey = labelOrKey %}
+      {{- block('choice_widget_expanded_option') -}}
+    {%- endif -%}
+  {% endfor %}
+{% endblock choice_widget_expanded_options %}
 
 
 
-{% block choice_widget_expanded_optgroup_ul %}
-  <li class="input-group">
-    <span class="input-group-header">
-      <span class="input-group-text">
-        {{ _self.labelRawAndOrTranslated(choiceData.label, choice_label_raw, choice_translation_domain) }}
-      </span>
+{% block choice_widget_expanded_option %}
+  {% set child = form[childKey] %}
+  {% if not child.rendered %}
+    {% if button|default(false) %}
+
+      {% set label_prefix %}
+        {{ form_widget(child) }}
+      {% endset %}
+      {{ form_label(child, null, { 'label_attr': attributes(button_attr).class('form-control-handle').add(button_items_attr[child.vars.label]|default).class(hbmbfClasses('button_item')).toArray, 'label_raw': choice_label_raw, 'label_prefix': label_prefix }) }}
+
+    {%- else -%}
+
+      <li class="input-group">
+          <span class="input-group-prepend {{ multiple ? 'hbm-form-input-checkbox' : 'hbm-form-input-radio' }}">
+            <span class="input-group-text">
+              {{ form_widget(child) }}
+            </span>
+          </span>
+        {{ form_label(child, null, { 'label_attr': attributes().class('form-control-handle').toArray, 'label_raw': choice_label_raw }) }}
+      </li>
+
+    {%- endif -%}
+  {%- endif -%}
+{% endblock choice_widget_expanded_option %}
+
+
+
+{% block choice_widget_expanded_options_separator %}
+  {% if button|default(false) %}
+    <span class="btn-group-separator">
+      {{ separator }}
     </span>
-  </li>
-{% endblock choice_widget_expanded_optgroup_ul %}
-
-
-
-{% block choice_widget_expanded_item_btn %}
-  {% set label_prefix %}
-    {{ form_widget(choice_item) }}
-  {% endset %}
-  {{ form_label(choice_item, null, { 'label_attr': attributes(button_attr).add(button_items_attr[choice_item.vars.label]|default).class(hbmbfClasses('button_item')).toArray, 'label_raw': choice_label_raw, 'label_prefix': label_prefix }) }}
-{% endblock choice_widget_expanded_item_btn %}
-
-
-
-{% block choice_widget_expanded_item_ul %}
-  <li class="input-group">
-    <span class="input-group-prepend {{ multiple ? 'hbm-form-input-checkbox' : 'hbm-form-input-radio' }}">
-      <span class="input-group-text">
-        {{ form_widget(choice_item) }}
+  {% else %}
+    <li class="input-group input-group-separator">
+      <span class="input-group-separator">
+        <span class="input-group-text">
+          {{ separator }}
+        </span>
       </span>
+    </li>
+  {% endif %}
+{% endblock choice_widget_expanded_options_separator %}
+
+
+
+{% block choice_widget_expanded_options_header %}
+  {% if button|default(false) %}
+    <span class="btn-group-header">
+      {{ _self.labelRawAndOrTranslated(labelOrKey, choice_label_raw, choice_translation_domain) }}
     </span>
-    {{ form_label(choice_item, null, { 'label_raw': choice_label_raw }) }}
-  </li>
-{% endblock choice_widget_expanded_item_ul %}
+  {% else %}
+    <li class="input-group input-group-header">
+      <span class="input-group-header">
+        <span class="input-group-text">
+          {{ _self.labelRawAndOrTranslated(labelOrKey, choice_label_raw, choice_translation_domain) }}
+        </span>
+      </span>
+    </li>
+  {% endif %}
+{% endblock choice_widget_expanded_options_header %}
 
 
 {# -------------------------------------------------------------------------- #}

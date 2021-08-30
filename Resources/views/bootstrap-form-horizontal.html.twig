@@ -229,8 +229,10 @@
 
   {% set element = tag('ul', attr).class('hbm-form-input-groups').id(id|default) %}
   {% set item_block = 'choice_widget_expanded_item_ul' %}
+  {% set optgroup_block = 'choice_widget_expanded_optgroup_ul' %}
   {% if button|default(false) %}
     {% set item_block = 'choice_widget_expanded_item_btn' %}
+    {% set optgroup_block = 'choice_widget_expanded_optgroup_btn' %}
     {% set element = element.tag('div').add(button_container_attr).set('data-toggle', 'buttons').class(hbmbfClasses('button_container')) %}
   {% endif %}
 
@@ -243,13 +245,7 @@
 
     {% for choiceKey, choiceData in form.vars.choices %}
       {% if choiceData is instanceof('Symfony\\Component\\Form\\ChoiceList\\View\\ChoiceGroupView') %}
-        <li class="input-group">
-          <span class="input-group-header">
-            <span class="input-group-text">
-              {%- if choice_label_raw -%}{{- choiceData.label|raw -}}{%- else -%}{{- choiceData.label -}}{%- endif -%}
-            </span>
-          </span>
-        </li>
+        {{ block(optgroup_block) }}
         {% for child in choiceData.choices %}
           {% set choice_item_key = 'formView_' ~ child.value %}
           {% if choice_item_key in widgetKeys %}
@@ -270,6 +266,24 @@
 
   {{ element.close|raw }}
 {% endblock choice_widget_expanded %}
+
+
+
+{% block choice_widget_expanded_optgroup_btn %}
+  {%- if choice_label_raw -%}{{- choiceData.label|raw -}}{%- else -%}{{- choiceData.label -}}{%- endif -%}
+{% endblock choice_widget_expanded_optgroup_btn %}
+
+
+
+{% block choice_widget_expanded_optgroup_ul %}
+  <li class="input-group">
+    <span class="input-group-header">
+      <span class="input-group-text">
+        {%- if choice_label_raw -%}{{- choiceData.label|raw -}}{%- else -%}{{- choiceData.label -}}{%- endif -%}
+      </span>
+    </span>
+  </li>
+{% endblock choice_widget_expanded_optgroup_ul %}
 
 
 

@@ -5,6 +5,14 @@
   {%- include '@HBMBootstrapForm/custom-content.html.twig' with { 'content': custom_content[key]|default, 'type': key } only -%}
 {% endmacro %}
 
+{% macro labelRawAndOrTranslated(label, raw, translationDomain, translationDomainParameters = {}) %}
+  {%- if translationDomain is same as(false) or label is same as(false) -%}
+    {%- if raw -%}{{- label|raw -}}{%- else -%}{{- label -}}{%- endif -%}
+  {%- else -%}
+    {%- if raw -%}{{- label|trans(translationDomainParameters, translationDomain)|raw -}}{%- else -%}{{- label|trans(translationDomainParameters, translationDomain) -}}{%- endif -%}
+  {%- endif -%}
+{% endmacro %}
+
 
 {# -------------------------------------------------------------------------- #}
 
@@ -204,8 +212,7 @@
       {% set label = name|humanize %}
     {%- endif -%}
   {%- endif -%}
-  {%- set labelTranslatedOrNot = translation_domain is same as(false) or label is same as(false) ? label : label|trans(label_translation_parameters, translation_domain) -%}
-  <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ label_raw ? (labelTranslatedOrNot|raw) : labelTranslatedOrNot }}</button>
+  <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ _self.labelRawAndOrTranslated(label, label_raw, translation_domain, label_translation_parameters) }}</button>
 {%- endblock button_widget -%}
 
 
@@ -237,11 +244,12 @@
   {% endif %}
 
   {{ element.open|raw }}
+    {{- _self.customContent(custom_content|default(), 'before-choices') -}}
+
     {% if placeholder is not null %}
+      {% set choice_item = placeholder %}
       {{ block(item_block) }}
     {% endif %}
-
-    {{- _self.customContent(custom_content|default(), 'before-choices') -}}
 
     {% for choiceKey, choiceData in form.vars.choices %}
       {% if choiceData is instanceof('Symfony\\Component\\Form\\ChoiceList\\View\\ChoiceGroupView') %}
@@ -270,7 +278,7 @@
 
 
 {% block choice_widget_expanded_optgroup_btn %}
-  {%- if choice_label_raw -%}{{- choiceData.label|raw -}}{%- else -%}{{- choiceData.label -}}{%- endif -%}
+  {{ _self.labelRawAndOrTranslated(choiceData.label, choice_label_raw, choice_translation_domain) }}
 {% endblock choice_widget_expanded_optgroup_btn %}
 
 
@@ -279,7 +287,7 @@
   <li class="input-group">
     <span class="input-group-header">
       <span class="input-group-text">
-        {%- if choice_label_raw -%}{{- choiceData.label|raw -}}{%- else -%}{{- choiceData.label -}}{%- endif -%}
+        {{ _self.labelRawAndOrTranslated(choiceData.label, choice_label_raw, choice_translation_domain) }}
       </span>
     </span>
   </li>
@@ -339,11 +347,7 @@
     {%- endif -%}
     {{ element.open|raw }}
       {{- label_prefix|default -}}
-      {%- if translation_domain is same as(false) -%}
-        {%- if label_raw -%}{{- label|raw -}}{%- else -%}{{- label -}}{%- endif -%}
-      {%- else -%}
-        {%- if label_raw -%}{{- label|trans({}, translation_domain)|raw -}}{%- else -%}{{- label|trans({}, translation_domain) -}}{%- endif -%}
-      {%- endif -%}
+      {{ _self.labelRawAndOrTranslated(label, label_raw, translation_domain)|raw }}
       {{- label_postfix|default -}}
     {{ element.close|raw }}
   {%- endif -%}

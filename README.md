@@ -36,8 +36,12 @@ hbm_bootstrap_form:
     card_text: []
     card_item: []
     help: ['text-muted']
-    alerts_ul: []
-    alerts_li: ['alert', 'alert-danger']
+    
+    alert_container: []
+    alert_item: ['alert', 'alert-danger']
+
+    button_container: ['btn-group', 'btn-group-toggle']
+    button_item: ['btn', 'btn-secondary']
 
   elements:
     help: small
@@ -109,6 +113,33 @@ hbm_bootstrap_form:
           'after-label' => [/* ... */],
           'before-widget' => [/* ... */],
           'after-widget' => [/* ... */],
+          'before-help' => [/* ... */],
+          'after-help' => [/* ... */],
+          'before-error' => [/* ... */],
+          'after-error' => [/* ... */],
+        ],
+        'help' => 'This is a help text.',
+      ]);
+
+    $group
+      ->add('name', ChoiceType::class, [
+        'label' => 'Some selection',
+        'required' => true,
+
+        // Use bootstrap button layout.
+        'button' => TRUE,
+        
+        // Add additional attributes to card element.
+        // Every button attributes.
+        'button_attr' => [],
+        // Button specific attributes (analog choice_attr).
+        'button_items_attr' => [],
+        // Gutton group attributes.
+        'button_container_attr' => [],
+        
+        'custom_content' => [
+          'before-choices' => [/* ... */],
+          'after-choices' => [/* ... */],
         ],
         'help' => 'This is a help text.',
       ]);

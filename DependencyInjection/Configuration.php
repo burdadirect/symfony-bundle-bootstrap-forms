@@ -33,9 +33,14 @@ class Configuration implements ConfigurationInterface {
             ->arrayNode('card_body')->scalarPrototype()->end()->defaultValue([])->end()
             ->arrayNode('card_text')->scalarPrototype()->end()->defaultValue([])->end()
             ->arrayNode('card_item')->scalarPrototype()->end()->defaultValue([])->end()
+
             ->arrayNode('help')->scalarPrototype()->end()->defaultValue(['text-muted'])->end()
-            ->arrayNode('alerts_ul')->scalarPrototype()->end()->defaultValue([])->end()
-            ->arrayNode('alerts_li')->scalarPrototype()->end()->defaultValue(['alert', 'alert-danger'])->end()
+
+            ->arrayNode('alert_container')->scalarPrototype()->end()->defaultValue([])->end()
+            ->arrayNode('alert_item')->scalarPrototype()->end()->defaultValue(['alert', 'alert-danger'])->end()
+
+            ->arrayNode('button_container')->scalarPrototype()->end()->defaultValue(['btn-group', 'btn-group-toggle'])->end()
+            ->arrayNode('button_item')->scalarPrototype()->end()->defaultValue(['btn', 'btn-secondary'])->end()
           ->end()
         ->end()
         ->arrayNode('elements')->addDefaultsIfNotSet()

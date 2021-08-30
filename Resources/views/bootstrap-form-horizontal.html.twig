@@ -36,7 +36,7 @@
         {{- _self.customContent(custom_content|default(), 'after-widget') -}}
 
         {% if 'checkbox' in block_prefixes %}
-          {% include '@HBMBootstrapForm/label-with-custom-content.html.twig' with { 'label_attr': attributes(label_attr).class('hbm-form-label-inline') } %}
+          {% include '@HBMBootstrapForm/label-with-custom-content.html.twig' with { 'label_attr': attributes(label_attr).class('hbm-form-label-inline').toArray } %}
         {% endif %}
 
         {{- _self.customContent(custom_content|default(), 'before-help') -}}
@@ -153,32 +153,33 @@
 
 {% block form_widget_simple %}
   {% set type = type|default('text') %}
-  {% set classes = attr.class|default('')|token(' ') %}
+  {% set attributes = attributes(attr) %}
+  {% set classes = attributes.classes %}
 
   {% if 'hidden' not in block_prefixes %}<span class="input-group">{% endif %}
   <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
 
   {%- if 'read_only' in attr|keys %}
     <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
-    {%- elseif disabled %}
+  {%- elseif disabled %}
     <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
-    {%- elseif 'number' in block_prefixes %}
+  {%- elseif 'number' in block_prefixes %}
     <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-hashtag"></i></span></span>
-    {%- elseif 'color' in block_prefixes %}
+  {%- elseif 'color' in block_prefixes %}
     <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-palette"></i></span></span>
-    {%- elseif 'email' in block_prefixes %}
+  {%- elseif 'email' in block_prefixes %}
     <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-envelope"></i></span></span>
-    {%- elseif 'date-picker' in classes or 'datetime-picker' in classes or type == 'datetime' %}
+  {%- elseif 'date-picker' in classes or 'datetime-picker' in classes or type == 'datetime' %}
     <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-calendar"></i></span></span>
-    {%- elseif 'url' in block_prefixes %}
+  {%- elseif 'url' in block_prefixes %}
     <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-globe"></i></span></span>
-    {%- elseif 'file' in block_prefixes %}
+  {%- elseif 'file' in block_prefixes %}
     <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-file"></i></span></span>
-    {%- elseif 'password' in block_prefixes %}
+  {%- elseif 'password' in block_prefixes %}
     <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-key"></i></span></span>
-    {%- elseif 'money' in block_prefixes %}
+  {%- elseif 'money' in block_prefixes %}
     <span class="input-group-append"><span class="input-group-text"><span class="fa-fw">{{ money_pattern|form_encode_currency('') }}</span></span></span>
-    {%- elseif 'text' in block_prefixes %}
+  {%- elseif 'text' in block_prefixes %}
     <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-pencil-alt"></i></span></span>
   {% endif -%}
   {% if 'hidden' not in block_prefixes %}</span>{% endif %}
@@ -297,8 +298,11 @@
 
 
 {%- block widget_attributes -%}
-  {% set isSelect = 'choice' in block_prefixes and expanded == false %}
-  {% set attr = attributes(attr).class('custom-select', isSelect, 'form-control').toArray %}
+  {% if 'choice' in block_prefixes and expanded == false %}
+    {% set attr = attributes(attr).class('custom-select').toArray %}
+  {% elseif 'checkbox' not in block_prefixes %}
+    {% set attr = attributes(attr).class('form-control').toArray %}
+  {% endif %}
   {{ parent() }}
 {%- endblock widget_attributes -%}
 

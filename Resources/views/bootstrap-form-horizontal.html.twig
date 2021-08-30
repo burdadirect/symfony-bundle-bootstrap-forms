@@ -220,8 +220,6 @@
 
 
 {% block choice_widget_expanded %}
-  {% set choice_label_raw = form.vars.choice_label_raw %}
-
   {% set widgets = {} %}
   {% set placeholder = null %}
   {% for childKey, child in form %}
@@ -299,7 +297,7 @@
   {% set label_prefix %}
     {{ form_widget(choice_item) }}
   {% endset %}
-  {{ form_label(choice_item, null, { 'label_attr': attributes(button_attr).add(button_items_attr[choice_item.vars.label]|default).class(hbmbfClasses('button_item', ['form-control'])).toArray, 'label_raw': choice_label_raw, 'label_prefix': label_prefix }) }}
+  {{ form_label(choice_item, null, { 'label_attr': attributes(button_attr).add(button_items_attr[choice_item.vars.label]|default).class(hbmbfClasses('button_item')).toArray, 'label_raw': choice_label_raw, 'label_prefix': label_prefix }) }}
 {% endblock choice_widget_expanded_item_btn %}
 
 
@@ -311,7 +309,7 @@
         {{ form_widget(choice_item) }}
       </span>
     </span>
-    {{ form_label(choice_item, null, { 'label_attr': attributes().class('form-control').toArray, 'label_raw': choice_label_raw }) }}
+    {{ form_label(choice_item, null, { 'label_raw': choice_label_raw }) }}
   </li>
 {% endblock choice_widget_expanded_item_ul %}
 

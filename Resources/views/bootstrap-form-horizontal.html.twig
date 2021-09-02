@@ -281,7 +281,13 @@
       {% set label_prefix %}
         {{ form_widget(child) }}
       {% endset %}
-      {{ form_label(child, null, { 'label_attr': attributes(button_attr).class('form-control-handle').add(button_items_attr[child.vars.label]|default).class(hbmbfClasses('button_item')).toArray, 'label_raw': choice_label_raw, 'label_prefix': label_prefix }) }}
+
+      {% set attributes = attributes(button_attr).class('form-control-handle').add(button_items_attr[child.vars.label]|default).class(hbmbfClasses('button_item')) %}
+      {% if disabled %}
+        {% set attributes = attributes.class('hbm-disabled').set('aria-disabled', 'true').set('tabindex', '-1') %}
+      {% endif %}
+
+      {{ form_label(child, null, { 'label_attr': attributes.toArray, 'label_raw': choice_label_raw, 'label_prefix': label_prefix }) }}
 
     {%- else -%}
 

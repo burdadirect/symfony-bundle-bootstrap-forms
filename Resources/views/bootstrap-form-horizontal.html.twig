@@ -128,7 +128,7 @@
 
     {{- _self.customContent(custom_content|default(), 'before-header') -}}
 
-    <div {{ attributes(attr).add(card_header_attr).class(hbmbfClasses('card_header', ['card-header', 'hbm-form-header']))|raw }}>
+    <div {{ attributes().add(card_header_attr).class(hbmbfClasses('card_header', ['card-header', 'hbm-form-header']))|raw }}>
       {{- _self.customContent(custom_content|default(), 'before-headline') -}}
       {{ form_label(form) }}
       {{- _self.customContent(custom_content|default(), 'after-headline') -}}

@@ -99,9 +99,9 @@
 
 {% block form_errors %}
   {% if errors|length > 0 %}
-    {{ hbmbfTagStart('ul', hbmbfClasses('alerts_container', ['hbm-alerts']))|raw }}
+    {{ hbmbfTagStart('ul', hbmbfClasses('alert_container', ['hbm-alerts']))|raw }}
     {% for error in errors %}
-      {{ hbmbfHtml(error.message, 'li', hbmbfClasses('alerts_item'))|raw }}
+      {{ hbmbfHtml(error.message, 'li', hbmbfClasses('alert_item'))|raw }}
     {% endfor %}
     {{ hbmbfTagEnd('ul')|raw }}
   {% endif %}

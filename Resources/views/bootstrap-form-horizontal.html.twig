@@ -291,8 +291,8 @@
 
     {%- else -%}
 
-      <li class="input-group">
-          <span class="input-group-prepend {{ multiple ? 'hbm-form-input-checkbox' : 'hbm-form-input-radio' }}">
+      <li {{ attributes(li_attr).class('input-group').add(li_items_attr[child.vars.label]|default)|raw }}>
+          <span {{ attributes().class('input-group-prepend').class('hbm-form-input-checkbox', multiple, 'hbm-form-input-radio')|raw }}>
             <span class="input-group-text">
               {{ form_widget(child) }}
             </span>

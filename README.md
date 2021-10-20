@@ -126,6 +126,11 @@ hbm_bootstrap_form:
         'label' => 'Some selection',
         'required' => true,
 
+        // Every li attributes.
+        'li_attr' => [],
+        // Button specific attributes (analog choice_attr).
+        'li_items_attr' => [],
+
         // Use bootstrap button layout.
         'button' => TRUE,
         

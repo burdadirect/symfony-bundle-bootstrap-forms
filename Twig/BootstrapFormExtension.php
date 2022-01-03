@@ -3,6 +3,7 @@
 namespace HBM\BootstrapFormBundle\Twig;
 
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class BootstrapFormExtension extends AbstractExtension {
@@ -29,6 +30,12 @@ class BootstrapFormExtension extends AbstractExtension {
       new TwigFunction('hbmbfHtml', [$this, 'hbmbfHtml']),
       new TwigFunction('hbmbfTagStart', [$this, 'hbmbfTagStart']),
       new TwigFunction('hbmbfTagEnd', [$this, 'hbmbfTagEnd']),
+    ];
+  }
+
+  public function getFilters() : array {
+    return [
+      new TwigFilter('hbmbfItemAttr', [$this, 'hbmbfItemAttr']),
     ];
   }
 
@@ -71,6 +78,29 @@ class BootstrapFormExtension extends AbstractExtension {
 
   public function hbmbfTagEnd(string $element) : string {
     return '</'.$element.'>';
+  }
+
+  /****************************************************************************/
+  /* FILTERS                                                                  */
+  /****************************************************************************/
+
+  /**
+   * @param array|callable|null $attr
+   * @param mixed $childLabel
+   * @param mixed $childKey
+   *
+   * @return array|mixed|string
+   */
+  public function hbmbfItemAttr($attr, $choice, $childKey, $childLabel) {
+    if (is_callable($attr)) {
+      return $attr($choice, $childKey, $childLabel);
+    }
+
+    if (is_array($attr)) {
+      return $attr[$childLabel] ?? $attr[$childKey] ?? [];
+    }
+
+    return [];
   }
 
 }

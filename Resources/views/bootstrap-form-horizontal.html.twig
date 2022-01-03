@@ -282,7 +282,7 @@
         {{ form_widget(child) }}
       {% endset %}
 
-      {% set attributes = attributes(button_attr).class('form-control-handle').add(button_items_attr[child.vars.label]|default).class(hbmbfClasses('button_item')) %}
+      {% set attributes = attributes(button_attr).class('form-control-handle').add(button_items_attr|hbmbfItemAttr(choice.data, childKey, child.vars.label)).class(hbmbfClasses('button_item')) %}
       {% if disabled %}
         {% set attributes = attributes.class('hbm-disabled').set('aria-disabled', 'true').set('tabindex', '-1') %}
       {% endif %}
@@ -291,7 +291,7 @@
 
     {%- else -%}
 
-      <li {{ attributes(li_attr).class('input-group').add(li_items_attr[child.vars.label]|default)|raw }}>
+      <li {{ attributes(li_attr).class('input-group').add(li_items_attr|hbmbfItemAttr(choice.data, childKey, child.vars.label))|raw }}>
           <span {{ attributes().class('input-group-prepend').class('hbm-form-input-checkbox', multiple, 'hbm-form-input-radio')|raw }}>
             <span class="input-group-text">
               {{ form_widget(child) }}

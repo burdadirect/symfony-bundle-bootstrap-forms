@@ -80,13 +80,13 @@ hbm_bootstrap_form:
         'before-headline' => [['html' => '<p class="text">Content 3</p>']],
 
         // Will be rendered as template.
-        'after-headline' => [['template' => 'path/to/template.html.twig', 'templateParams' => ['var1' => $var]]],
+        'after-headline' => [['template' => ['name' => 'path/to/template.html.twig', 'params' => ['var1' => $var]]]],
       
         // All options above can be mixed.
         'before-body' => [
           'This is a plain text.',
           ['html' => '<p class="text">And this is a HTML text.</p>'],
-          ['template' => 'path/to/template.html.twig', 'templateParams' => ['obj' => $obj]]
+          ['template' => ['name' => 'path/to/template.html.twig', 'params' => ['obj' => $obj]]]
         ],
 
         'after-body' => [/* ... */],

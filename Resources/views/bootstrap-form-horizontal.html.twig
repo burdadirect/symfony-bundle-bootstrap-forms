@@ -177,6 +177,8 @@
     <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-palette"></i></span></span>
   {%- elseif 'email' in block_prefixes %}
     <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-envelope"></i></span></span>
+  {%- elseif 'tel' in block_prefixes %}
+    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-phone"></i></span></span>
   {%- elseif 'date-picker' in classes or 'datetime-picker' in classes or type == 'datetime' %}
     <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-calendar"></i></span></span>
   {%- elseif 'url' in block_prefixes %}

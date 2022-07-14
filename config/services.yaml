@@ -5,7 +5,7 @@ services:
 
     # FORM
     HBM\BootstrapFormBundle\Form\Extension\:
-        resource: '../Form/Extension'
+        resource: '../src/Form/Extension'
         tags:
             - { name: form.type_extension }
 

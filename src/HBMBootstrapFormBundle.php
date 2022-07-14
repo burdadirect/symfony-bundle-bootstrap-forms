@@ -1,6 +1,6 @@
 <?php
 
-namespace HBM\BootstrapFormBundle\src;
+namespace HBM\BootstrapFormBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace HBM\BootstrapFormBundle\src\Form\Extension;
+namespace HBM\BootstrapFormBundle\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\FormType;

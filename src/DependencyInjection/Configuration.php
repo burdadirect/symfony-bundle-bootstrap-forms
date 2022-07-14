@@ -1,6 +1,6 @@
 <?php
 
-namespace HBM\BootstrapFormBundle\src\DependencyInjection;
+namespace HBM\BootstrapFormBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

@@ -1,26 +1,22 @@
 <?php
 
-namespace HBM\BootstrapFormBundle\Form\Extension;
+namespace HBM\BootstrapFormBundle\src\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FieldTypeCardExtension extends AbstractTypeExtension {
+class FieldTypeListExtension extends AbstractTypeExtension {
 
   /**
    * @var array
    */
   private $keys = [
-    'card' => false,
-    'card_attr' => [],
-    'card_header_attr' => [],
-    'card_body_attr' => [],
-    'card_text_attr' => [],
-    'card_item_attr' => [],
+    'li_attr' => [],
+    'li_items_attr' => [],
   ];
 
   /**
@@ -57,7 +53,7 @@ class FieldTypeCardExtension extends AbstractTypeExtension {
    * @return array
    */
   public static function getExtendedTypes() : iterable {
-    return [FormType::class];
+    return [ChoiceType::class];
   }
 
 }

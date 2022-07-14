@@ -1,6 +1,6 @@
 <?php
 
-namespace HBM\BootstrapFormBundle\DependencyInjection;
+namespace HBM\BootstrapFormBundle\src\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -25,8 +25,8 @@ class HBMBootstrapFormExtension extends Extension {
 
     $container->setParameter('hbm.bootstrap_form', $config);
 
-    $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-    $loader->load('services.yml');
+    $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
+    $loader->load('services.yaml');
   }
 
 }

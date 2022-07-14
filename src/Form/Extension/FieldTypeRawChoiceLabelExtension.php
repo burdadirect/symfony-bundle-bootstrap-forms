@@ -1,36 +1,22 @@
 <?php
 
-namespace HBM\BootstrapFormBundle\Form\Extension;
+namespace HBM\BootstrapFormBundle\src\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FieldTypeButtonExtension extends AbstractTypeExtension {
-
-  /**
-   * @var array
-   */
-  private $keys = [
-    'button' => false,
-    'button_attr' => [],
-    'button_items_attr' => [],
-    'button_container_attr' => [],
-  ];
+class FieldTypeRawChoiceLabelExtension extends AbstractTypeExtension {
 
   /**
    * @param FormBuilderInterface $builder
    * @param array                $options
    */
   public function buildForm(FormBuilderInterface $builder, array $options) {
-    foreach ($this->keys as $key => $default) {
-      $builder->setAttribute($key, $options[$key] ?? $default);
-    }
+    $builder->setAttribute('choice_label_raw', (bool)($options['choice_label_raw'] ?? FALSE));
   }
 
   /**
@@ -39,9 +25,7 @@ class FieldTypeButtonExtension extends AbstractTypeExtension {
    * @param array         $options
    */
   public function buildView(FormView $view, FormInterface $form, array $options) {
-    foreach ($this->keys as $key => $default) {
-      $view->vars[$key] = $options[$key] ?? $default;
-    }
+    $view->vars['choice_label_raw'] = (bool)($options['choice_label_raw'] ?? FALSE);
   }
 
   /**
@@ -50,14 +34,14 @@ class FieldTypeButtonExtension extends AbstractTypeExtension {
    * @param OptionsResolver $resolver
    */
   public function configureOptions(OptionsResolver $resolver) {
-    $resolver->setDefined(array_keys($this->keys));
+    $resolver->setDefined(['choice_label_raw']);
   }
 
   /**
    * @return array
    */
   public static function getExtendedTypes() : iterable {
-    return [ChoiceType::class, CheckboxType::class];
+    return [FormType::class];
   }
 
 }

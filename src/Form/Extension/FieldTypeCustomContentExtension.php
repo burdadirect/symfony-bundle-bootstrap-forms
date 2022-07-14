@@ -1,24 +1,24 @@
 <?php
 
-namespace HBM\BootstrapFormBundle\Form\Extension;
+namespace HBM\BootstrapFormBundle\src\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FieldTypeRawChoiceLabelExtension extends AbstractTypeExtension {
+class FieldTypeCustomContentExtension extends AbstractTypeExtension {
 
   /**
    * @param FormBuilderInterface $builder
    * @param array                $options
    */
   public function buildForm(FormBuilderInterface $builder, array $options) {
-    $builder->setAttribute('choice_label_raw', (bool)($options['choice_label_raw'] ?? FALSE));
+    if (isset($options['custom_content'])) {
+      $builder->setAttribute('custom_content', $options['custom_content']);
+    }
   }
 
   /**
@@ -27,16 +27,18 @@ class FieldTypeRawChoiceLabelExtension extends AbstractTypeExtension {
    * @param array         $options
    */
   public function buildView(FormView $view, FormInterface $form, array $options) {
-    $view->vars['choice_label_raw'] = (bool)($options['choice_label_raw'] ?? FALSE);
+    if (isset($options['custom_content'])) {
+      $view->vars['custom_content'] = $options['custom_content'];
+    }
   }
 
   /**
-   * Add the help option
+   * Add the custom_content option
    *
    * @param OptionsResolver $resolver
    */
   public function configureOptions(OptionsResolver $resolver) {
-    $resolver->setDefined(['choice_label_raw']);
+    $resolver->setDefined(['custom_content']);
   }
 
   /**

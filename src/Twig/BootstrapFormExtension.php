@@ -1,6 +1,6 @@
 <?php
 
-namespace HBM\BootstrapFormBundle\Twig;
+namespace HBM\BootstrapFormBundle\src\Twig;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;

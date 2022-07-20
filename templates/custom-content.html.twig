@@ -11,7 +11,11 @@
     {% elseif item.html is defined %}
       {{ item.html|raw }}
     {% elseif item.template is defined %}
-      {% include item.template.name with item.template.params only %}
+      {% if item.template is iterable %}
+        {% include item.template.name with item.template.params|merge({'form': form}) only %}
+      {% else %}
+        {% include item.template with {'form': form} only %}
+      {% endif %}
     {% endif %}
   {% endfor %}
 {% endif %}

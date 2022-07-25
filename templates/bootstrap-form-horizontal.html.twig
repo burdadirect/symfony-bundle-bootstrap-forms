@@ -164,36 +164,46 @@
   {% set attributes = attributes(attr) %}
   {% set classes = attributes.classes %}
 
-  {% if 'hidden' not in block_prefixes %}<span class="input-group">{% endif %}
-  <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+  {% if 'hbm_content' not in block_prefixes %}
+    {% if 'hidden' not in block_prefixes %}<span class="input-group">{% endif %}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
 
-  {%- if 'read_only' in attr|keys %}
-    <span class="input-gr<oup-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
-  {%- elseif disabled %}
-    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
-  {%- elseif 'number' in block_prefixes %}
-    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-hashtag"></i></span></span>
-  {%- elseif 'color' in block_prefixes %}
-    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-palette"></i></span></span>
-  {%- elseif 'email' in block_prefixes %}
-    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-envelope"></i></span></span>
-  {%- elseif 'tel' in block_prefixes %}
-    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-phone"></i></span></span>
-  {%- elseif 'date-picker' in classes or 'datetime-picker' in classes or type == 'datetime' %}
-    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-calendar"></i></span></span>
-  {%- elseif 'url' in block_prefixes %}
-    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-globe"></i></span></span>
-  {%- elseif 'file' in block_prefixes %}
-    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-file"></i></span></span>
-  {%- elseif 'password' in block_prefixes %}
-    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-key"></i></span></span>
-  {%- elseif 'money' in block_prefixes %}
-    <span class="input-group-append"><span class="input-group-text"><span class="fa-fw">{{ money_pattern|form_encode_currency('') }}</span></span></span>
-  {%- elseif 'text' in block_prefixes %}
-    <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-pencil-alt"></i></span></span>
-  {% endif -%}
-  {% if 'hidden' not in block_prefixes %}</span>{% endif %}
+    {%- if 'read_only' in attr|keys %}
+      <span class="input-gr<oup-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
+    {%- elseif disabled %}
+      <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
+    {%- elseif 'number' in block_prefixes %}
+      <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-hashtag"></i></span></span>
+    {%- elseif 'color' in block_prefixes %}
+      <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-palette"></i></span></span>
+    {%- elseif 'email' in block_prefixes %}
+      <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-envelope"></i></span></span>
+    {%- elseif 'tel' in block_prefixes %}
+      <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-phone"></i></span></span>
+    {%- elseif 'date-picker' in classes or 'datetime-picker' in classes or type == 'datetime' %}
+      <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-calendar"></i></span></span>
+    {%- elseif 'url' in block_prefixes %}
+      <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-globe"></i></span></span>
+    {%- elseif 'file' in block_prefixes %}
+      <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-file"></i></span></span>
+    {%- elseif 'password' in block_prefixes %}
+      <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-key"></i></span></span>
+    {%- elseif 'money' in block_prefixes %}
+      <span class="input-group-append"><span class="input-group-text"><span class="fa-fw">{{ money_pattern|form_encode_currency('') }}</span></span></span>
+    {%- elseif 'text' in block_prefixes %}
+      <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-pencil-alt"></i></span></span>
+    {% endif -%}
+    {% if 'hidden' not in block_prefixes %}</span>{% endif %}
+  {% endif %}
 {% endblock form_widget_simple %}
+
+
+
+{%- block hbm_content_widget -%}
+  <div {{ block('widget_attributes') }}>
+    {{- data|raw -}}
+  </div>
+{%- endblock hbm_content_widget -%}
 
 
 

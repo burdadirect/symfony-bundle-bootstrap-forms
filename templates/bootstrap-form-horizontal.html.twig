@@ -240,7 +240,7 @@
 
   {{ element.open|raw }}
 
-    {{- _self.customContent(custom_content|default(), 'before-choices') -}}
+    {{- _self.customContent(form, custom_content|default(), 'before-choices') -}}
 
     {% if placeholder is not null %}
       {% set childKey = 'placeholder' %}
@@ -259,7 +259,7 @@
     {% set options = choices %}
     {{- block('choice_widget_expanded_options') -}}
 
-    {{- _self.customContent(custom_content|default(), 'after-choices') -}}
+    {{- _self.customContent(form, custom_content|default(), 'after-choices') -}}
 
   {{ element.close|raw }}
 

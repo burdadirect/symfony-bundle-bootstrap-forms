@@ -35,7 +35,7 @@
       {{- _self.customContent(form, custom_content|default(), 'before-item') -}}
 
       {% if 'checkbox' not in block_prefixes %}
-        {% include '@HBMBootstrapForm/label-with-custom-content.html.twig' %}
+        {% include '@HBMBootstrapForm/label-with-custom-content.html.twig' with { 'form': form } %}
       {% endif %}
 
       <div {{ attributes(card_item_attr).class(hbmbfClasses('card_item', ['hbm-form-controls']))|raw }}>
@@ -44,7 +44,7 @@
         {{- _self.customContent(form, custom_content|default(), 'after-widget') -}}
 
         {% if 'checkbox' in block_prefixes %}
-          {% include '@HBMBootstrapForm/label-with-custom-content.html.twig' with { 'label_attr': attributes(label_attr).class('hbm-form-label-inline').toArray } %}
+          {% include '@HBMBootstrapForm/label-with-custom-content.html.twig' with { 'form': form, 'label_attr': attributes(label_attr).class('hbm-form-label-inline').toArray } %}
         {% endif %}
 
         {{- _self.customContent(form, custom_content|default(), 'before-help') -}}

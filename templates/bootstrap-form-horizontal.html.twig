@@ -295,6 +295,9 @@
       {% endset %}
 
       {% set attributes = attributes(button_attr).class('form-control-handle').add(button_items_attr|hbmbfItemAttr(choice.data|default(null), childKey, child.vars.label)).class(hbmbfClasses('button_item')) %}
+      {% if child.vars.checked|default %}
+        {% set attributes = attributes.class('active') %}
+      {% endif %}
       {% if disabled %}
         {% set attributes = attributes.class('hbm-disabled').set('aria-disabled', 'true').set('tabindex', '-1') %}
       {% endif %}

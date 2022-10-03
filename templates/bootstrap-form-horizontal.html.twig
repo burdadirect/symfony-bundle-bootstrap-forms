@@ -169,7 +169,7 @@
     <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
 
     {%- if 'read_only' in attr|keys %}
-      <span class="input-gr<oup-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
+      <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
     {%- elseif disabled %}
       <span class="input-group-append"><span class="input-group-text"><i class="fa fa-fw fa-ban"></i></span></span>
     {%- elseif 'number' in block_prefixes %}

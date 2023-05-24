@@ -28,7 +28,7 @@ class FieldTypeCustomContentExtension extends AbstractTypeExtension {
    */
   public function buildView(FormView $view, FormInterface $form, array $options) {
     if (isset($options['custom_content'])) {
-      $view->vars['custom_content'] = $options['custom_content'];
+      $view->vars['custom_content'] = array_merge_recursive($view->vars['custom_content'] ?? [], $options['custom_content']);
     }
   }
 

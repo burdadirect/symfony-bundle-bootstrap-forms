@@ -224,7 +224,7 @@
       {% set label = name|humanize %}
     {%- endif -%}
   {%- endif -%}
-  <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ _self.labelRawAndOrTranslated(label, label_raw, translation_domain, label_translation_parameters) }}</button>
+  <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ _self.labelRawAndOrTranslated(label, label_html, translation_domain, label_translation_parameters) }}</button>
 {%- endblock button_widget -%}
 
 
@@ -302,7 +302,7 @@
         {% set attributes = attributes.class('hbm-disabled').set('aria-disabled', 'true').set('tabindex', '-1') %}
       {% endif %}
 
-      {{ form_label(child, null, { 'label_attr': attributes.toArray, 'label_raw': choice_label_raw, 'label_prefix': label_prefix }) }}
+      {{ form_label(child, null, { 'label_attr': attributes.toArray, 'label_html': choice_label_html, 'label_prefix': label_prefix }) }}
 
     {%- else -%}
 
@@ -312,7 +312,7 @@
               {{ form_widget(child) }}
             </span>
           </span>
-        {{ form_label(child, null, { 'label_attr': attributes().class('form-control-handle').toArray, 'label_raw': choice_label_raw }) }}
+        {{ form_label(child, null, { 'label_attr': attributes().class('form-control-handle').toArray, 'label_html': choice_label_html }) }}
       </li>
 
     {%- endif -%}
@@ -342,13 +342,13 @@
 {% block choice_widget_expanded_options_header %}
   {% if button|default(false) %}
     <span class="btn-group-header">
-      {{ _self.labelRawAndOrTranslated(labelOrKey, choice_label_raw, choice_translation_domain) }}
+      {{ _self.labelRawAndOrTranslated(labelOrKey, choice_label_html, choice_translation_domain) }}
     </span>
   {% else %}
     <li class="input-group input-group-header">
       <span class="input-group-header">
         <span class="input-group-text">
-          {{ _self.labelRawAndOrTranslated(labelOrKey, choice_label_raw, choice_translation_domain) }}
+          {{ _self.labelRawAndOrTranslated(labelOrKey, choice_label_html, choice_translation_domain) }}
         </span>
       </span>
     </li>
@@ -387,7 +387,7 @@
     {%- endif -%}
     {{ element.open|raw }}
       {{- label_prefix|default -}}
-      {{ _self.labelRawAndOrTranslated(label, label_raw, translation_domain)|raw }}
+      {{ _self.labelRawAndOrTranslated(label, label_html, translation_domain)|raw }}
       {{- label_postfix|default -}}
     {{ element.close|raw }}
   {%- endif -%}

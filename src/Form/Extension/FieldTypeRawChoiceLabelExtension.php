@@ -16,7 +16,7 @@ class FieldTypeRawChoiceLabelExtension extends AbstractTypeExtension {
    * @param array                $options
    */
   public function buildForm(FormBuilderInterface $builder, array $options) {
-    $builder->setAttribute('choice_label_raw', (bool)($options['choice_label_raw'] ?? FALSE));
+    $builder->setAttribute('choice_label_html', (bool)($options['choice_label_html'] ?? FALSE));
   }
 
   /**
@@ -25,7 +25,7 @@ class FieldTypeRawChoiceLabelExtension extends AbstractTypeExtension {
    * @param array         $options
    */
   public function buildView(FormView $view, FormInterface $form, array $options) {
-    $view->vars['choice_label_raw'] = (bool)($options['choice_label_raw'] ?? FALSE);
+    $view->vars['choice_label_html'] = (bool)($options['choice_label_html'] ?? FALSE);
   }
 
   /**
@@ -34,7 +34,7 @@ class FieldTypeRawChoiceLabelExtension extends AbstractTypeExtension {
    * @param OptionsResolver $resolver
    */
   public function configureOptions(OptionsResolver $resolver) {
-    $resolver->setDefined(['choice_label_raw']);
+    $resolver->setDefined(['choice_label_html']);
   }
 
   /**

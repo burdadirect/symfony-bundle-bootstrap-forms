@@ -24,18 +24,18 @@ class BootstrapFormExtension extends AbstractExtension {
 
   public function getFunctions() : array {
     return [
-      new TwigFunction('hbmbfClass', [$this, 'hbmbfClass']),
-      new TwigFunction('hbmbfClasses', [$this, 'hbmbfClasses']),
-      new TwigFunction('hbmbfElement', [$this, 'hbmbfElement']),
-      new TwigFunction('hbmbfHtml', [$this, 'hbmbfHtml']),
-      new TwigFunction('hbmbfTagStart', [$this, 'hbmbfTagStart']),
-      new TwigFunction('hbmbfTagEnd', [$this, 'hbmbfTagEnd']),
+      new TwigFunction('hbmbfClass', $this->hbmbfClass(...)),
+      new TwigFunction('hbmbfClasses', $this->hbmbfClasses(...)),
+      new TwigFunction('hbmbfElement', $this->hbmbfElement(...)),
+      new TwigFunction('hbmbfHtml', $this->hbmbfHtml(...)),
+      new TwigFunction('hbmbfTagStart', $this->hbmbfTagStart(...)),
+      new TwigFunction('hbmbfTagEnd', $this->hbmbfTagEnd(...)),
     ];
   }
 
   public function getFilters() : array {
     return [
-      new TwigFilter('hbmbfItemAttr', [$this, 'hbmbfItemAttr']),
+      new TwigFilter('hbmbfItemAttr', $this->hbmbfItemAttr(...)),
     ];
   }
 

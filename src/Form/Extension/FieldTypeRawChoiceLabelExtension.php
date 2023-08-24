@@ -24,7 +24,7 @@ class FieldTypeRawChoiceLabelExtension extends AbstractTypeExtension {
    * @param FormInterface $form
    * @param array         $options
    */
-  public function buildView(FormView $view, FormInterface $form, array $options) {
+  public function buildView(FormView $view, FormInterface $form, array $options): void {
     $view->vars['choice_label_html'] = (bool)($options['choice_label_html'] ?? FALSE);
   }
 

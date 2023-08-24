@@ -34,7 +34,7 @@ class FieldTypeListExtension extends AbstractTypeExtension {
    * @param FormInterface $form
    * @param array         $options
    */
-  public function buildView(FormView $view, FormInterface $form, array $options) {
+  public function buildView(FormView $view, FormInterface $form, array $options): void {
     foreach ($this->keys as $key => $default) {
       $view->vars[$key] = $options[$key] ?? $default;
     }

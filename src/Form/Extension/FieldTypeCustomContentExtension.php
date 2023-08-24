@@ -15,7 +15,7 @@ class FieldTypeCustomContentExtension extends AbstractTypeExtension {
    * @param FormBuilderInterface $builder
    * @param array                $options
    */
-  public function buildForm(FormBuilderInterface $builder, array $options) {
+  public function buildForm(FormBuilderInterface $builder, array $options): void {
     if (isset($options['custom_content'])) {
       $builder->setAttribute('custom_content', $options['custom_content']);
     }
@@ -37,7 +37,7 @@ class FieldTypeCustomContentExtension extends AbstractTypeExtension {
    *
    * @param OptionsResolver $resolver
    */
-  public function configureOptions(OptionsResolver $resolver) {
+  public function configureOptions(OptionsResolver $resolver): void {
     $resolver->setDefined(['custom_content']);
   }
 

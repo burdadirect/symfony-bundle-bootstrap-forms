@@ -27,7 +27,7 @@ class FieldTypeCardExtension extends AbstractTypeExtension {
    * @param FormBuilderInterface $builder
    * @param array                $options
    */
-  public function buildForm(FormBuilderInterface $builder, array $options) {
+  public function buildForm(FormBuilderInterface $builder, array $options): void {
     foreach ($this->keys as $key => $default) {
       $builder->setAttribute($key, $options[$key] ?? $default);
     }
@@ -49,7 +49,7 @@ class FieldTypeCardExtension extends AbstractTypeExtension {
    *
    * @param OptionsResolver $resolver
    */
-  public function configureOptions(OptionsResolver $resolver) {
+  public function configureOptions(OptionsResolver $resolver): void {
     $resolver->setDefined(array_keys($this->keys));
   }
 

@@ -5,19 +5,20 @@ namespace HBM\BootstrapFormBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ContentType extends AbstractType {
+class ContentType extends AbstractType
+{
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+          'disabled' => true,
+          'required' => false,
+          'mapped'   => false,
+          'compound' => false,
+        ]);
+    }
 
-  public function configureOptions(OptionsResolver $resolver): void {
-    $resolver->setDefaults([
-      'disabled' => true,
-      'required' => false,
-      'mapped' => false,
-      'compound' => false,
-    ]);
-  }
-
-  public function getBlockPrefix(): string {
-    return 'hbm_content';
-  }
-
+    public function getBlockPrefix(): string
+    {
+        return 'hbm_content';
+    }
 }

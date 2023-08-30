@@ -10,42 +10,42 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  */
-class Configuration implements ConfigurationInterface {
+class Configuration implements ConfigurationInterface
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfigTreeBuilder(): TreeBuilder
+    {
+        $treeBuilder = new TreeBuilder('hbm_bootstrap_form');
+        $rootNode    = $treeBuilder->getRootNode();
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getConfigTreeBuilder(): TreeBuilder {
-    $treeBuilder = new TreeBuilder('hbm_bootstrap_form');
-    $rootNode = $treeBuilder->getRootNode();
-
-    $rootNode
-      ->children()
-        ->arrayNode('classes')->addDefaultsIfNotSet()
+        $rootNode
           ->children()
-            ->arrayNode('card')->scalarPrototype()->end()->defaultValue(['mb-4'])->end()
-            ->arrayNode('card_header')->scalarPrototype()->end()->defaultValue([])->end()
-            ->arrayNode('card_body')->scalarPrototype()->end()->defaultValue([])->end()
-            ->arrayNode('card_text')->scalarPrototype()->end()->defaultValue([])->end()
-            ->arrayNode('card_item')->scalarPrototype()->end()->defaultValue([])->end()
+            ->arrayNode('classes')->addDefaultsIfNotSet()
+              ->children()
+                ->arrayNode('card')->scalarPrototype()->end()->defaultValue(['mb-4'])->end()
+                ->arrayNode('card_header')->scalarPrototype()->end()->defaultValue([])->end()
+                ->arrayNode('card_body')->scalarPrototype()->end()->defaultValue([])->end()
+                ->arrayNode('card_text')->scalarPrototype()->end()->defaultValue([])->end()
+                ->arrayNode('card_item')->scalarPrototype()->end()->defaultValue([])->end()
 
-            ->arrayNode('help')->scalarPrototype()->end()->defaultValue(['text-muted'])->end()
+                ->arrayNode('help')->scalarPrototype()->end()->defaultValue(['text-muted'])->end()
 
-            ->arrayNode('alert_container')->scalarPrototype()->end()->defaultValue([])->end()
-            ->arrayNode('alert_item')->scalarPrototype()->end()->defaultValue(['alert', 'alert-danger'])->end()
+                ->arrayNode('alert_container')->scalarPrototype()->end()->defaultValue([])->end()
+                ->arrayNode('alert_item')->scalarPrototype()->end()->defaultValue(['alert', 'alert-danger'])->end()
 
-            ->arrayNode('button_container')->scalarPrototype()->end()->defaultValue(['btn-group', 'btn-group-toggle'])->end()
-            ->arrayNode('button_item')->scalarPrototype()->end()->defaultValue(['btn', 'btn-secondary'])->end()
-          ->end()
-        ->end()
-        ->arrayNode('elements')->addDefaultsIfNotSet()
-          ->children()
-            ->scalarNode('help')->defaultValue('small')->end()
-          ->end()
-        ->end()
-      ->end();
+                ->arrayNode('button_container')->scalarPrototype()->end()->defaultValue(['btn-group', 'btn-group-toggle'])->end()
+                ->arrayNode('button_item')->scalarPrototype()->end()->defaultValue(['btn', 'btn-secondary'])->end()
+              ->end()
+            ->end()
+            ->arrayNode('elements')->addDefaultsIfNotSet()
+              ->children()
+                ->scalarNode('help')->defaultValue('small')->end()
+              ->end()
+            ->end()
+          ->end();
 
-    return $treeBuilder;
-  }
-
+        return $treeBuilder;
+    }
 }

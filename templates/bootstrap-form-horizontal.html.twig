@@ -387,7 +387,7 @@
     {%- endif -%}
     {{ element.open|raw }}
       {{- label_prefix|default -}}
-      {{ _self.labelRawAndOrTranslated(label, label_html, translation_domain)|raw }}
+      {{ _self.labelRawAndOrTranslated(label, label_html, translation_domain, label_translation_parameters)|raw }}
       {{- label_postfix|default -}}
     {{ element.close|raw }}
   {%- endif -%}
